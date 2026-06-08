@@ -6,1163 +6,1009 @@
 <title>OOP Master Tutor</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0d0f14;
-  --bg2: #13161e;
-  --bg3: #1a1e29;
-  --border: #2a2f3e;
-  --border2: #3a4055;
-  --text: #e8eaf2;
-  --muted: #8892a4;
-  --accent: #7c6af5;
-  --accent2: #5ad4b0;
-  --accent3: #f0845c;
-  --accent4: #f5c842;
-  --code-bg: #0a0c12;
-  --code-text: #a8d8ea;
-  --mono: 'JetBrains Mono', monospace;
-  --sans: 'DM Sans', sans-serif;
-  --serif: 'Crimson Pro', serif;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1.7;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: var(--bg2);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.08em; }
-.header-title { font-size: 16px; font-weight: 600; }
-.header-sub { font-size: 12px; color: var(--muted); font-family: var(--mono); }
-.progress-bar { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-left: auto; max-width: 200px; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.4s ease; }
-
-.layout { display: flex; flex: 1; min-height: 0; }
-
-.sidebar {
-  width: 260px;
-  flex-shrink: 0;
-  background: var(--bg2);
-  border-right: 1px solid var(--border);
-  padding: 1.5rem 0;
-  overflow-y: auto;
-  position: sticky;
-  top: 61px;
-  height: calc(100vh - 61px);
-}
-.nav-section { padding: 0 1rem 0.5rem; font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1.5rem; }
-.nav-section:first-child { margin-top: 0; }
-.nav-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 1.25rem;
-  font-size: 13.5px;
-  color: var(--muted);
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.15s;
-  line-height: 1.3;
-}
-.nav-item:hover { color: var(--text); background: var(--bg3); }
-.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(124,106,245,0.08); }
-.nav-item.done { color: var(--accent2); }
-.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border2); flex-shrink: 0; }
-.nav-item.done .nav-dot { background: var(--accent2); }
-.nav-item.active .nav-dot { background: var(--accent); }
-
-.main { flex: 1; overflow-y: auto; }
-.content { max-width: 820px; margin: 0 auto; padding: 2.5rem 2rem; }
-
-h1 { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
-h2 { font-size: 1.1rem; font-weight: 600; color: var(--accent); margin: 2rem 0 0.75rem; letter-spacing: 0.02em; display: flex; align-items: center; gap: 8px; }
-h2::before { content: '§'; font-family: var(--mono); font-size: 0.85rem; opacity: 0.5; }
-h3 { font-size: 0.9rem; font-weight: 500; color: var(--accent2); margin: 1.25rem 0 0.5rem; font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
-p { margin-bottom: 1rem; color: #c8ccda; }
-strong { color: var(--text); font-weight: 600; }
-em { color: var(--accent4); font-style: italic; }
-
-.topic-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-.topic-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(124,106,245,0.15); color: var(--accent); border-radius: 4px; font-family: var(--mono); font-size: 11px; margin-bottom: 0.75rem; }
-
-pre {
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.25rem 1.5rem;
-  overflow-x: auto;
-  margin: 1rem 0;
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.65;
-  position: relative;
-}
-code { font-family: var(--mono); font-size: 12.5px; }
-pre code { color: #c8d8f0; }
-.kw { color: #c792ea; }
-.cm { color: #546e7a; font-style: italic; }
-.st { color: #c3e88d; }
-.nm { color: var(--accent4); }
-.tp { color: #89ddff; }
-.fn { color: #82aaff; }
-.anno { color: var(--accent2); }
-
-.callout {
-  border-left: 3px solid var(--accent);
-  background: rgba(124,106,245,0.07);
-  padding: 1rem 1.25rem;
-  border-radius: 0 8px 8px 0;
-  margin: 1.25rem 0;
-}
-.callout.tip { border-left-color: var(--accent2); background: rgba(90,212,176,0.06); }
-.callout.warn { border-left-color: var(--accent3); background: rgba(240,132,92,0.07); }
-.callout.danger { border-left-color: #e24b4a; background: rgba(226,75,74,0.07); }
-.callout-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; font-weight: 500; color: var(--accent); }
-.callout.tip .callout-title { color: var(--accent2); }
-.callout.warn .callout-title { color: var(--accent3); }
-.callout.danger .callout-title { color: #e24b4a; }
-
-.diagram {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 1.25rem 0;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1.6;
-  color: #8da0c0;
-  white-space: pre;
-  overflow-x: auto;
-}
-.diagram .hl { color: var(--accent2); }
-.diagram .hl2 { color: var(--accent); }
-.diagram .hl3 { color: var(--accent3); }
-
-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13.5px; }
-th { text-align: left; padding: 8px 12px; background: var(--bg3); color: var(--accent2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--border2); }
-td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: #c0c8d8; }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,0.02); }
-
-.quiz-section {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin: 2rem 0;
-}
-.quiz-title { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
-.quiz-q { font-size: 14.5px; color: var(--text); margin-bottom: 1rem; line-height: 1.6; }
-.quiz-q code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; }
-
-.answer-toggle {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px;
-  background: transparent;
-  border: 1px solid var(--border2);
-  color: var(--muted);
-  border-radius: 5px;
-  font-size: 12px; font-family: var(--mono);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.answer-toggle:hover { border-color: var(--accent); color: var(--accent); }
-.answer-box { margin-top: 1rem; padding: 1rem 1.25rem; background: rgba(90,212,176,0.06); border-left: 3px solid var(--accent2); border-radius: 0 6px 6px 0; display: none; font-size: 13.5px; color: #c0d0e0; }
-.answer-box.visible { display: block; }
-
-.nav-btns { display: flex; gap: 1rem; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-.btn {
-  padding: 9px 20px; border-radius: 6px; font-size: 13px; cursor: pointer;
-  font-family: var(--sans); font-weight: 500; transition: all 0.15s;
-  border: 1px solid var(--border2); background: var(--bg3); color: var(--text);
-}
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
-.btn.primary:hover { background: #8e7ef7; }
-.btn:disabled { opacity: 0.35; cursor: default; }
-
-.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-family: var(--mono); background: rgba(255,255,255,0.06); color: var(--muted); margin: 2px; }
-.tag.java { background: rgba(240,132,92,0.15); color: var(--accent3); }
-.tag.concept { background: rgba(124,106,245,0.15); color: var(--accent); }
-.tag.pattern { background: rgba(90,212,176,0.15); color: var(--accent2); }
-
-.memory-hook {
-  display: flex; gap: 12px; align-items: flex-start;
-  background: rgba(245,200,66,0.06); border: 1px solid rgba(245,200,66,0.2);
-  padding: 1rem 1.25rem; border-radius: 8px; margin: 1rem 0;
-}
-.hook-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-.hook-text { font-size: 13.5px; color: #d4c080; }
-
-.section-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; overflow-x: auto; }
-.stab {
-  padding: 8px 16px; font-size: 12.5px; color: var(--muted); cursor: pointer;
-  border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap;
-  font-family: var(--mono);
-}
-.stab:hover { color: var(--text); }
-.stab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-.roadmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
-.roadmap-card {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1rem;
-  cursor: pointer; transition: all 0.2s;
-}
-.roadmap-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-.roadmap-card .num { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.roadmap-card .title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-.roadmap-card .desc { font-size: 12px; color: var(--muted); }
-.roadmap-card.locked { opacity: 0.4; cursor: default; }
-.roadmap-card.locked:hover { transform: none; border-color: var(--border); }
-.roadmap-card.complete .title { color: var(--accent2); }
-
-.topic-page { display: none; }
-.topic-page.active { display: block; }
-
-.highlight-box {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem; margin: 1rem 0;
-}
-.hbox {
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1rem;
-}
-.hbox .hb-title { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-.hbox .hb-val { font-size: 15px; font-weight: 600; color: var(--text); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e29;--border:#2a2f3e;--border2:#3a4055;--text:#e8eaf2;--muted:#8892a4;--accent:#7c6af5;--accent2:#5ad4b0;--accent3:#f0845c;--accent4:#f5c842;--code-bg:#0a0c12;--mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif;--serif:'Crimson Pro',serif}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;min-height:100vh;display:flex;flex-direction:column}
+.header{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;background:var(--bg2);position:sticky;top:0;z-index:100}
+.logo{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.08em}
+.header-title{font-size:15px;font-weight:600}
+.header-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.progress-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-left:auto;max-width:180px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease}
+.layout{display:flex;flex:1;min-height:0}
+.sidebar{width:248px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:1rem 0;overflow-y:auto;position:sticky;top:57px;height:calc(100vh - 57px)}
+.nav-section{padding:.75rem 1rem .3rem;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:.5rem}
+.nav-item{display:flex;align-items:center;gap:8px;padding:6px 1.25rem;font-size:13px;color:var(--muted);cursor:pointer;border-left:2px solid transparent;transition:all .15s;line-height:1.3}
+.nav-item:hover{color:var(--text);background:var(--bg3)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(124,106,245,.08)}
+.nav-item.done{color:var(--accent2)}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.nav-item.done .nav-dot{background:var(--accent2)}
+.nav-item.active .nav-dot{background:var(--accent)}
+.main{flex:1;overflow-y:auto}
+.content{max-width:820px;margin:0 auto;padding:2rem}
+h1{font-family:var(--serif);font-size:1.85rem;font-weight:600;margin-bottom:.2rem}
+h2{font-size:1rem;font-weight:600;color:var(--accent);margin:1.75rem 0 .6rem;display:flex;align-items:center;gap:8px}
+h2::before{content:'§';font-family:var(--mono);font-size:.8rem;opacity:.5}
+h3{font-size:.82rem;font-weight:500;color:var(--accent2);margin:1rem 0 .4rem;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+p{margin-bottom:.9rem;color:#c8ccda}
+strong{color:var(--text);font-weight:600}
+em{color:var(--accent4);font-style:italic}
+.topic-header{margin-bottom:1.75rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+.topic-badge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;background:rgba(124,106,245,.15);color:var(--accent);border-radius:4px;font-family:var(--mono);font-size:11px;margin-bottom:.6rem}
+pre{background:var(--code-bg);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;overflow-x:auto;margin:.75rem 0;font-family:var(--mono);font-size:12.5px;line-height:1.65}
+code{font-family:var(--mono);font-size:12px}
+pre code{color:#c8d8f0}
+.kw{color:#c792ea}.cm{color:#546e7a;font-style:italic}.st{color:#c3e88d}.nm{color:var(--accent4)}.tp{color:#89ddff}.fn{color:#82aaff}.anno{color:var(--accent2)}
+.callout{border-left:3px solid var(--accent);background:rgba(124,106,245,.07);padding:.9rem 1.1rem;border-radius:0 8px 8px 0;margin:1rem 0}
+.callout.tip{border-left-color:var(--accent2);background:rgba(90,212,176,.06)}
+.callout.warn{border-left-color:var(--accent3);background:rgba(240,132,92,.07)}
+.callout.danger{border-left-color:#e24b4a;background:rgba(226,75,74,.07)}
+.callout-title{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.35rem;font-weight:500;color:var(--accent)}
+.callout.tip .callout-title{color:var(--accent2)}.callout.warn .callout-title{color:var(--accent3)}.callout.danger .callout-title{color:#e24b4a}
+.diagram{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin:1rem 0;font-family:var(--mono);font-size:12px;line-height:1.6;color:#8da0c0;white-space:pre;overflow-x:auto}
+.diagram .hl{color:var(--accent2)}.diagram .hl2{color:var(--accent)}.diagram .hl3{color:var(--accent3)}
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:13px}
+th{text-align:left;padding:7px 11px;background:var(--bg3);color:var(--accent2);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;border-bottom:1px solid var(--border2)}
+td{padding:7px 11px;border-bottom:1px solid var(--border);color:#c0c8d8}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.quiz-section{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin:1.5rem 0}
+.quiz-title{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem}
+.quiz-q{font-size:13.5px;color:var(--text);margin-bottom:.75rem;line-height:1.6}
+.quiz-q code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:3px}
+.answer-toggle{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:5px;font-size:12px;font-family:var(--mono);cursor:pointer;transition:all .15s}
+.answer-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.answer-box{margin-top:.75rem;padding:.9rem 1.1rem;background:rgba(90,212,176,.06);border-left:3px solid var(--accent2);border-radius:0 6px 6px 0;display:none;font-size:13px;color:#c0d0e0}
+.answer-box.visible{display:block}
+.nav-btns{display:flex;gap:.75rem;margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+.btn{padding:8px 18px;border-radius:6px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:500;transition:all .15s;border:1px solid var(--border2);background:var(--bg3);color:var(--text)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:white}
+.btn.primary:hover{background:#8e7ef7}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:11px;font-family:var(--mono);background:rgba(255,255,255,.06);color:var(--muted);margin:2px}
+.tag.java{background:rgba(240,132,92,.15);color:var(--accent3)}
+.tag.concept{background:rgba(124,106,245,.15);color:var(--accent)}
+.tag.pattern{background:rgba(90,212,176,.15);color:var(--accent2)}
+.memory-hook{display:flex;gap:12px;align-items:flex-start;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);padding:.9rem 1.1rem;border-radius:8px;margin:.9rem 0}
+.hook-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.hook-text{font-size:13px;color:#d4c080}
+.roadmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:.8rem;margin:.9rem 0}
+.roadmap-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.85rem;cursor:pointer;transition:all .2s}
+.roadmap-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.roadmap-card .num{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:4px}
+.roadmap-card .title{font-size:13px;font-weight:600;margin-bottom:3px}
+.roadmap-card .desc{font-size:11px;color:var(--muted)}
+.roadmap-card.complete .title{color:var(--accent2)}
+.topic-page{display:none}.topic-page.active{display:block}
+.highlight-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.8rem;margin:.8rem 0}
+.hbox{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.85rem}
+.hbox .hb-title{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.hbox .hb-val{font-size:14px;font-weight:600;color:var(--text)}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div>
-    <div class="logo">OOP_TUTOR v1.0</div>
+    <div class="logo">OOP_TUTOR v2.0</div>
     <div class="header-title">Object-Oriented Programming</div>
-    <div class="header-sub">University of Groningen · Java · Deep Mastery</div>
+    <div class="header-sub">University of Groningen &middot; Java &middot; Complete Syllabus</div>
   </div>
-  <div class="progress-bar" style="margin-left:auto">
-    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-  </div>
-  <span id="progress-label" style="font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap">0 / 9</span>
+  <div class="progress-bar" style="margin-left:auto"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <span id="progress-label" style="font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap">0 / 18</span>
+</div>
+<div class="layout">
+<nav class="sidebar">
+  <div class="nav-section">Foundation</div>
+  <div class="nav-item" onclick="show('roadmap')" id="nav-roadmap"><div class="nav-dot"></div>Roadmap</div>
+  <div class="nav-item" onclick="show('oc')" id="nav-oc"><div class="nav-dot"></div>Objects &amp; Classes</div>
+  <div class="nav-item" onclick="show('enc')" id="nav-enc"><div class="nav-dot"></div>Encapsulation</div>
+  <div class="nav-section">Hierarchy</div>
+  <div class="nav-item" onclick="show('inh')" id="nav-inh"><div class="nav-dot"></div>Inheritance</div>
+  <div class="nav-item" onclick="show('poly')" id="nav-poly"><div class="nav-dot"></div>Polymorphism</div>
+  <div class="nav-item" onclick="show('cc')" id="nav-cc"><div class="nav-dot"></div>Constructor Chaining</div>
+  <div class="nav-section">Abstraction</div>
+  <div class="nav-item" onclick="show('abs')" id="nav-abs"><div class="nav-dot"></div>Abstract Classes</div>
+  <div class="nav-item" onclick="show('iface')" id="nav-iface"><div class="nav-dot"></div>Interfaces</div>
+  <div class="nav-section">Design Quality</div>
+  <div class="nav-item" onclick="show('cohcoup')" id="nav-cohcoup"><div class="nav-dot"></div>Cohesion &amp; Coupling</div>
+  <div class="nav-section">Design Patterns</div>
+  <div class="nav-item" onclick="show('mvc')" id="nav-mvc"><div class="nav-dot"></div>MVC</div>
+  <div class="nav-item" onclick="show('sing')" id="nav-sing"><div class="nav-dot"></div>Singleton</div>
+  <div class="nav-item" onclick="show('adap')" id="nav-adap"><div class="nav-dot"></div>Adapter</div>
+  <div class="nav-item" onclick="show('strat')" id="nav-strat"><div class="nav-dot"></div>Strategy</div>
+  <div class="nav-item" onclick="show('dec')" id="nav-dec"><div class="nav-dot"></div>Decorator</div>
+  <div class="nav-item" onclick="show('obs')" id="nav-obs"><div class="nav-dot"></div>Observer</div>
+  <div class="nav-item" onclick="show('cmd')" id="nav-cmd"><div class="nav-dot"></div>Command</div>
+  <div class="nav-section">Java Mechanics</div>
+  <div class="nav-item" onclick="show('exc')" id="nav-exc"><div class="nav-dot"></div>Exceptions</div>
+  <div class="nav-item" onclick="show('ser')" id="nav-ser"><div class="nav-dot"></div>Serialization</div>
+  <div class="nav-section">Mastery</div>
+  <div class="nav-item" onclick="show('rev')" id="nav-rev"><div class="nav-dot"></div>Final Review</div>
+</nav>
+<main class="main"><div class="content">
+<!-- ROADMAP -->
+<div class="topic-page active" id="page-roadmap">
+<div class="topic-header"><div class="topic-badge">Complete Syllabus</div><h1>OOP Mastery Roadmap</h1><p style="color:var(--muted)">18 topics covering the full course — Objects through Design Patterns through Java Mechanics.</p></div>
+<h2>Dependency Map</h2>
+<div class="diagram">Objects &amp; Classes
+  ├── Encapsulation       (private, getters/setters)
+  ├── Inheritance         (extends, super, @Override)
+  │     ├── Polymorphism         (dynamic dispatch)
+  │     └── Constructor Chaining (this(), super())
+  │           ├── Abstract Classes
+  │           └── Interfaces
+  ├── Cohesion &amp; Coupling  (design quality metrics)
+  └── Design Patterns
+        ├── MVC · Singleton · Adapter · Strategy
+        ├── Decorator · Observer · Command
+        └── Exceptions · Serialization  (Java mechanics)</div>
+<h2>All Topics</h2>
+<div class="roadmap-grid">
+<div class="roadmap-card" onclick="show('oc')"><div class="num">01</div><div class="title">Objects &amp; Classes</div><div class="desc">State, behaviour, fields, constructors</div></div>
+<div class="roadmap-card" onclick="show('enc')"><div class="num">02</div><div class="title">Encapsulation</div><div class="desc">private, getters, setters</div></div>
+<div class="roadmap-card" onclick="show('inh')"><div class="num">03</div><div class="title">Inheritance</div><div class="desc">extends, super, is-a, DRY</div></div>
+<div class="roadmap-card" onclick="show('poly')"><div class="num">04</div><div class="title">Polymorphism</div><div class="desc">Dynamic dispatch, runtime type</div></div>
+<div class="roadmap-card" onclick="show('cc')"><div class="num">05</div><div class="title">Constructor Chaining</div><div class="desc">this(), super(), build order</div></div>
+<div class="roadmap-card" onclick="show('abs')"><div class="num">06</div><div class="title">Abstract Classes</div><div class="desc">abstract keyword, enforced contracts</div></div>
+<div class="roadmap-card" onclick="show('iface')"><div class="num">07</div><div class="title">Interfaces</div><div class="desc">implements, is-capable-of</div></div>
+<div class="roadmap-card" onclick="show('cohcoup')"><div class="num">08</div><div class="title">Cohesion &amp; Coupling</div><div class="desc">High cohesion, low coupling, SRP</div></div>
+<div class="roadmap-card" onclick="show('mvc')"><div class="num">09</div><div class="title">MVC</div><div class="desc">Model, View, Controller</div></div>
+<div class="roadmap-card" onclick="show('sing')"><div class="num">10</div><div class="title">Singleton</div><div class="desc">One instance, private constructor</div></div>
+<div class="roadmap-card" onclick="show('adap')"><div class="num">11</div><div class="title">Adapter</div><div class="desc">Wrap incompatible interface</div></div>
+<div class="roadmap-card" onclick="show('strat')"><div class="num">12</div><div class="title">Strategy</div><div class="desc">Swappable algorithms, no if-else</div></div>
+<div class="roadmap-card" onclick="show('dec')"><div class="num">13</div><div class="title">Decorator</div><div class="desc">Add behaviour to objects dynamically</div></div>
+<div class="roadmap-card" onclick="show('obs')"><div class="num">14</div><div class="title">Observer</div><div class="desc">One-to-many notification</div></div>
+<div class="roadmap-card" onclick="show('cmd')"><div class="num">15</div><div class="title">Command</div><div class="desc">Encapsulate actions, HashMap dispatch</div></div>
+<div class="roadmap-card" onclick="show('exc')"><div class="num">16</div><div class="title">Exceptions</div><div class="desc">try-catch, finally, throws, custom</div></div>
+<div class="roadmap-card" onclick="show('ser')"><div class="num">17</div><div class="title">Serialization</div><div class="desc">Serializable, transient, serialVersionUID</div></div>
+<div class="roadmap-card" onclick="show('rev')"><div class="num">18</div><div class="title">Final Review</div><div class="desc">Exam prep, cheat sheet, practice Qs</div></div>
+</div>
+<h2>Mastery Checklist</h2>
+<div id="checklist" style="display:grid;gap:5px;margin:.9rem 0"></div>
 </div>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="nav-section">Foundation</div>
-    <div class="nav-item" onclick="show('roadmap')" id="nav-roadmap">
-      <div class="nav-dot"></div>Roadmap &amp; Overview
-    </div>
-    <div class="nav-item" onclick="show('objects-classes')" id="nav-objects-classes">
-      <div class="nav-dot"></div>Objects &amp; Classes
-    </div>
-    <div class="nav-item" onclick="show('encapsulation')" id="nav-encapsulation">
-      <div class="nav-dot"></div>Encapsulation
-    </div>
-    <div class="nav-section">Hierarchy</div>
-    <div class="nav-item" onclick="show('inheritance')" id="nav-inheritance">
-      <div class="nav-dot"></div>Inheritance
-    </div>
-    <div class="nav-item" onclick="show('polymorphism')" id="nav-polymorphism">
-      <div class="nav-dot"></div>Polymorphism
-    </div>
-    <div class="nav-item" onclick="show('constructor-chaining')" id="nav-constructor-chaining">
-      <div class="nav-dot"></div>Constructor Chaining
-    </div>
-    <div class="nav-section">Abstraction</div>
-    <div class="nav-item" onclick="show('abstract-classes')" id="nav-abstract-classes">
-      <div class="nav-dot"></div>Abstract Classes
-    </div>
-    <div class="nav-item" onclick="show('interfaces')" id="nav-interfaces">
-      <div class="nav-dot"></div>Interfaces
-    </div>
-    <div class="nav-section">Mastery</div>
-    <div class="nav-item" onclick="show('comparison')" id="nav-comparison">
-      <div class="nav-dot"></div>Comparison &amp; Review
-    </div>
-  </nav>
+<!-- OBJECTS & CLASSES -->
+<div class="topic-page" id="page-oc">
+<div class="topic-header"><div class="topic-badge">Topic 01 &middot; Foundation</div><h1>Objects &amp; Classes</h1><p style="color:var(--muted)">The atomic unit of OOP. Everything is built from these.</p><div><span class="tag concept">State</span><span class="tag concept">Behaviour</span><span class="tag java">new</span><span class="tag java">this</span></div></div>
+<h2>Big Picture</h2>
+<p>A <strong>class</strong> is a blueprint defining what state (fields) and behaviour (methods) its objects will have. An <strong>object</strong> is a concrete instance created from that blueprint at runtime. Each object gets its own separate copy of the fields.</p>
+<div class="callout tip"><div class="callout-title">Mental Model</div>Class = cookie cutter. Object = cookie. Field = the filling. Method = what it does. The cutter defines shape; each cookie has its own filling.</div>
+<h2>The Three Parts of a Class</h2>
+<div class="highlight-box">
+<div class="hbox"><div class="hb-title">Fields</div><div class="hb-val">State</div><p style="font-size:11px;color:var(--muted);margin:4px 0 0">Variables: <code>int age</code>, <code>String name</code></p></div>
+<div class="hbox"><div class="hb-title">Constructor</div><div class="hb-val">Initializer</div><p style="font-size:11px;color:var(--muted);margin:4px 0 0">Called with <code>new</code>. Sets initial state.</p></div>
+<div class="hbox"><div class="hb-title">Methods</div><div class="hb-val">Behaviour</div><p style="font-size:11px;color:var(--muted);margin:4px 0 0">Functions that act on state.</p></div>
+</div>
+<h2>Line-by-Line Example</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">Dog</span> {
+    <span class="kw">private</span> <span class="tp">String</span> name;           <span class="cm">// field — private always</span>
+    <span class="kw">private final</span> <span class="tp">String</span> breed;   <span class="cm">// final: cannot change after init</span>
+    <span class="kw">private boolean</span> hungry;
 
-  <main class="main">
-    <div class="content">
-
-      <!-- ROADMAP PAGE -->
-      <div class="topic-page active" id="page-roadmap">
-        <div class="topic-header">
-          <div class="topic-badge">Learning System</div>
-          <h1>OOP Mastery Roadmap</h1>
-          <p style="color:var(--muted);margin-top:0.5rem">Your complete learning path through Object-Oriented Programming in Java. Click any topic to begin.</p>
-        </div>
-
-        <h2>Dependency Map</h2>
-        <div class="diagram"><span class="hl2">Objects &amp; Classes</span>
-    │
-    ├──► <span class="hl">Encapsulation</span>   (access modifiers, getters/setters)
-    │
-    ├──► <span class="hl">Inheritance</span>     (extends, super, @Override)
-    │         │
-    │         ├──► <span class="hl">Polymorphism</span>          (type weakening, method dispatch)
-    │         │
-    │         └──► <span class="hl">Constructor Chaining</span>  (this(), super())
-    │                   │
-    │                   ├──► <span class="hl3">Abstract Classes</span>  (abstract keyword, must-implement)
-    │                   │
-    │                   └──► <span class="hl3">Interfaces</span>        (implements, is-capable-of)</div>
-
-        <h2>Study Order &amp; Mastery Stages</h2>
-        <div class="roadmap-grid">
-          <div class="roadmap-card" onclick="show('objects-classes')">
-            <div class="num">01 · Foundation</div>
-            <div class="title">Objects &amp; Classes</div>
-            <div class="desc">Fields, constructors, methods, state vs behaviour</div>
-          </div>
-          <div class="roadmap-card" onclick="show('encapsulation')">
-            <div class="num">02 · Foundation</div>
-            <div class="title">Encapsulation</div>
-            <div class="desc">private/public/protected, getters, setters</div>
-          </div>
-          <div class="roadmap-card" onclick="show('inheritance')">
-            <div class="num">03 · Hierarchy</div>
-            <div class="title">Inheritance</div>
-            <div class="desc">extends, super, code reuse, is-a relation</div>
-          </div>
-          <div class="roadmap-card" onclick="show('polymorphism')">
-            <div class="num">04 · Hierarchy</div>
-            <div class="title">Polymorphism</div>
-            <div class="desc">Type weakening, dynamic dispatch, @Override</div>
-          </div>
-          <div class="roadmap-card" onclick="show('constructor-chaining')">
-            <div class="num">05 · Hierarchy</div>
-            <div class="title">Constructor Chaining</div>
-            <div class="desc">this(), super(), construction order</div>
-          </div>
-          <div class="roadmap-card" onclick="show('abstract-classes')">
-            <div class="num">06 · Abstraction</div>
-            <div class="title">Abstract Classes</div>
-            <div class="desc">abstract keyword, abstract methods, no instantiation</div>
-          </div>
-          <div class="roadmap-card" onclick="show('interfaces')">
-            <div class="num">07 · Abstraction</div>
-            <div class="title">Interfaces</div>
-            <div class="desc">implements, capabilities, multiple implementation</div>
-          </div>
-          <div class="roadmap-card" onclick="show('comparison')">
-            <div class="num">08 · Mastery</div>
-            <div class="title">Comparison &amp; Review</div>
-            <div class="desc">Abstract vs Interface, when to use what</div>
-          </div>
-        </div>
-
-        <h2>Core Concepts Checklist</h2>
-        <div id="checklist" style="display:grid;gap:6px;margin:1rem 0;font-size:13.5px;">
-        </div>
-
-        <h2>Estimated Mastery Stages</h2>
-        <table>
-          <tr><th>Stage</th><th>What you can do</th><th>Approx. time</th></tr>
-          <tr><td><span style="color:var(--accent2)">Beginner</span></td><td>Create simple classes, understand fields and methods</td><td>Topics 1–2</td></tr>
-          <tr><td><span style="color:var(--accent)">Intermediate</span></td><td>Use inheritance, override methods, understand polymorphism</td><td>Topics 3–5</td></tr>
-          <tr><td><span style="color:var(--accent3)">Advanced</span></td><td>Design with abstract classes and interfaces, apply OOP patterns</td><td>Topics 6–8</td></tr>
-          <tr><td><span style="color:var(--accent4)">Expert</span></td><td>Reason about design decisions, refactor, explain tradeoffs fluently</td><td>Review + practice</td></tr>
-        </table>
-      </div>
-
-      <!-- OBJECTS & CLASSES -->
-      <div class="topic-page" id="page-objects-classes">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 01 · Foundation</div>
-          <h1>Objects &amp; Classes</h1>
-          <p style="color:var(--muted)">The atomic unit of all OOP. Everything you build will be made of these.</p>
-          <div><span class="tag java">Java</span><span class="tag concept">State</span><span class="tag concept">Behaviour</span></div>
-        </div>
-
-        <div class="section-tabs">
-          <div class="stab active" onclick="switchTab(this,'oc','overview')">Big Picture</div>
-          <div class="stab" onclick="switchTab(this,'oc','theory')">Core Theory</div>
-          <div class="stab" onclick="switchTab(this,'oc','diagram')">Visualization</div>
-          <div class="stab" onclick="switchTab(this,'oc','code')">Examples</div>
-          <div class="stab" onclick="switchTab(this,'oc','mistakes')">Mistakes</div>
-          <div class="stab" onclick="switchTab(this,'oc','quiz')">Active Recall</div>
-        </div>
-
-        <div class="tab-content active" id="oc-overview">
-          <h2>Why do Objects &amp; Classes exist?</h2>
-          <p>Before OOP, programs were written procedurally — long sequences of instructions, data passed around as loose variables. As programs grew, this became unmanageable. Two questions plagued every project: <em>where is this data?</em> and <em>what code is allowed to touch it?</em></p>
-          <p>Objects solve both. An object <strong>bundles data (state) with the code that acts on it (behaviour)</strong>. A class is the blueprint — the template you write once. Objects are the living instances created from that blueprint at runtime.</p>
-          <div class="callout tip">
-            <div class="callout-title">Mental Model</div>
-            Think of a class as a cookie cutter and an object as a cookie. The cutter defines the shape. You can stamp out a thousand cookies, each identical in structure but different in their filling (state).
-          </div>
-          <p>In Java, every object has two aspects: its <strong>state</strong> (stored in fields — the data it remembers) and its <strong>behaviour</strong> (exposed through methods — the things it can do). This mirrors the real world exactly.</p>
-        </div>
-
-        <div class="tab-content" id="oc-theory">
-          <h2>The Three Parts of a Class</h2>
-          <div class="highlight-box">
-            <div class="hbox"><div class="hb-title">Fields</div><div class="hb-val">State</div><p style="font-size:12px;color:var(--muted);margin:4px 0 0">Variables that store an object's data. E.g. <code>int age</code>, <code>String name</code></p></div>
-            <div class="hbox"><div class="hb-title">Constructor</div><div class="hb-val">Initializer</div><p style="font-size:12px;color:var(--muted);margin:4px 0 0">Special method called with <code>new</code>. Sets up initial state.</p></div>
-            <div class="hbox"><div class="hb-title">Methods</div><div class="hb-val">Behaviour</div><p style="font-size:12px;color:var(--muted);margin:4px 0 0">Functions that act on the object's state or interact with other objects.</p></div>
-          </div>
-          <h3>Object vs Instance</h3>
-          <p>These two words mean the same thing. An <strong>object</strong> is a concrete realization of a class in memory. When you write <code>new Dog("Rex", "Labrador")</code>, Java allocates heap memory, calls the constructor, and hands you back a reference to that memory location. That's your object.</p>
-          <h3>The <code>this</code> keyword</h3>
-          <p>Inside any method or constructor, <code>this</code> refers to the current object — the one the method was called on. This is critical when a parameter name shadows a field name:</p>
-          <pre><code><span class="kw">public</span> Dog(<span class="tp">String</span> name) {
-    <span class="cm">// 'name' here is the parameter, not the field!</span>
-    <span class="kw">this</span>.name = name; <span class="cm">// this.name → the field; name → the parameter</span>
-}</code></pre>
-          <p>Without <code>this</code>, the assignment <code>name = name</code> would assign the parameter back to itself — a completely useless no-op, and a classic beginner bug.</p>
-        </div>
-
-        <div class="tab-content" id="oc-diagram">
-          <h2>Memory Diagram: Creating a Dog Object</h2>
-          <div class="diagram">
-Stack                        Heap
-──────────────────           ──────────────────────────────
-<span class="hl2">Dog myDog</span>  ──────────────► <span class="hl">Dog object @ 0x4F3A</span>
-                              ┌─────────────────────────┐
-                              │  name    = "Rex"         │
-                              │  breed   = "Labrador"    │
-                              │  hungry  = true          │
-                              └─────────────────────────┘
-
-Code: Dog myDog = <span class="hl3">new</span> Dog("Rex", "Labrador");
-
-1. JVM allocates heap space for the Dog object
-2. Constructor Dog("Rex","Labrador") runs
-3. Fields get initialized
-4. Reference (memory address) stored in stack variable myDog</div>
-          <h2>Class vs Object Summary</h2>
-          <div class="diagram">
-<span class="hl2">CLASS Dog</span>  (blueprint, exists once in memory)
-  ├── field:  String name
-  ├── field:  String breed
-  ├── field:  boolean hungry
-  ├── constructor: Dog(String, String)
-  └── method: bark(), biteStranger(Person)
-
-<span class="hl">Object: myDog</span>    <span class="hl3">Object: yourDog</span>
-  name = "Rex"      name = "Max"
-  breed = "Lab"     breed = "Poodle"
-  hungry = true     hungry = false</div>
-        </div>
-
-        <div class="tab-content" id="oc-code">
-          <h2>The Dog Class — Line by Line</h2>
-          <pre><code><span class="kw">public class</span> <span class="tp">Dog</span> {               <span class="cm">// defines the blueprint</span>
-    <span class="kw">private</span> <span class="tp">String</span> name;           <span class="cm">// field: stores dog's name</span>
-    <span class="kw">private final</span> <span class="tp">String</span> breed;   <span class="cm">// 'final': can never change after init</span>
-    <span class="kw">private boolean</span> hungry;        <span class="cm">// field: dogs start hungry (true)</span>
-
-    <span class="kw">public</span> <span class="fn">Dog</span>(<span class="tp">String</span> dogName, <span class="tp">String</span> dogBreed) { <span class="cm">// constructor</span>
-        name   = dogName;           <span class="cm">// initialise field from parameter</span>
-        breed  = dogBreed;
-        hungry = <span class="kw">true</span>;            <span class="cm">// hard-coded initial state</span>
+    <span class="kw">public</span> <span class="fn">Dog</span>(<span class="tp">String</span> name, <span class="tp">String</span> breed) {
+        <span class="kw">this</span>.name  = name;    <span class="cm">// this.name = field, name = parameter</span>
+        <span class="kw">this</span>.breed = breed;
+        hungry = <span class="kw">true</span>;
     }
 
-    <span class="kw">public void</span> <span class="fn">bark</span>() {           <span class="cm">// method with no return value</span>
+    <span class="kw">public void</span> <span class="fn">bark</span>() {
         System.out.println(name + <span class="st">": Woof!"</span>);
     }
 }</code></pre>
-          <p>Creating and using the object:</p>
-          <pre><code><span class="tp">Dog</span> myDog = <span class="kw">new</span> <span class="fn">Dog</span>(<span class="st">"Rex"</span>, <span class="st">"Labrador"</span>);
-myDog.<span class="fn">bark</span>();   <span class="cm">// output: Rex: Woof!</span></code></pre>
+<h2>Memory Diagram</h2>
+<div class="diagram">Stack                  Heap
+──────────────         ─────────────────────────────
+myDog  ──────────────► Dog object @ 0x4F3A
+                       │ name   = "Rex"             │
+                       │ breed  = "Labrador"        │
+                       │ hungry = true              │
+myDog is a REFERENCE (address), not the object itself.</div>
+<div class="callout danger"><div class="callout-title">Classic Bug — Shadowing</div><code>name = name;</code> assigns parameter to itself. Field stays null. Fix: <code>this.name = name;</code></div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">Two objects: <code>Dog a = new Dog("Rex","Lab"); Dog b = new Dog("Max","Poodle");</code> — <code>a.bark()</code> prints what? Why doesn't changing <code>b</code>'s name affect <code>a</code>?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">Prints <strong>Rex: Woof!</strong>. Each object has its own <em>separate copy</em> of every field in heap memory. <code>a</code> and <code>b</code> are independent objects at different memory addresses. Fields are <strong>instance variables</strong> — each instance holds its own copy.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128273;</div><div class="hook-text"><strong>Memory Hook:</strong> Class = blueprint. Object = building. Field = rooms. Method = what happens in rooms. <code>this</code> = "this specific building."</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('roadmap')">&#8592; Roadmap</button><button class="btn primary" onclick="markDone('oc');show('enc')">Next: Encapsulation &#8594;</button></div>
+</div>
 
-          <h2>C Struct vs Java Class</h2>
-          <p>You already know C structs from Algorithms &amp; Data Structures. A Java class is a supercharged struct:</p>
-          <table>
-            <tr><th>Feature</th><th>C Struct</th><th>Java Class</th></tr>
-            <tr><td>Data grouping</td><td>✓</td><td>✓</td></tr>
-            <tr><td>Methods bundled with data</td><td>✗ (separate functions)</td><td>✓</td></tr>
-            <tr><td>Access control</td><td>✗</td><td>✓ (public/private)</td></tr>
-            <tr><td>Memory management</td><td>Manual (malloc/free)</td><td>Automatic (GC)</td></tr>
-            <tr><td>Inheritance</td><td>✗</td><td>✓</td></tr>
-          </table>
-        </div>
+<!-- ENCAPSULATION -->
+<div class="topic-page" id="page-enc">
+<div class="topic-header"><div class="topic-badge">Topic 02 &middot; Foundation</div><h1>Encapsulation</h1><p style="color:var(--muted)">Hide internals. Expose only a controlled interface.</p><div><span class="tag concept">private</span><span class="tag concept">Getters</span><span class="tag concept">Setters</span></div></div>
+<h2>Big Picture</h2>
+<p>Encapsulation hides implementation details and exposes only what is necessary. Fields are always <code>private</code>. Anyone needing to read or change them goes through methods you write and control.</p>
+<div class="callout tip"><div class="callout-title">Mental Model</div>TV remote: buttons are public interface. Circuits inside are private. You control exactly what each button does — and can change internals without users knowing.</div>
+<h2>Access Modifiers</h2>
+<table><tr><th>Modifier</th><th>Who can access</th><th>Use when</th></tr>
+<tr><td><code style="color:var(--accent3)">private</code></td><td>This class only</td><td>Always for fields. Default for methods.</td></tr>
+<tr><td><code style="color:var(--accent2)">protected</code></td><td>This class + subclasses + package</td><td>Fields subclasses genuinely need directly</td></tr>
+<tr><td><code style="color:var(--accent)">public</code></td><td>Everyone</td><td>Methods forming the public API</td></tr>
+<tr><td><em>none</em></td><td>Same package only</td><td>Avoid — breaks when you move packages</td></tr></table>
+<h2>Getters and Setters — Why They Matter</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">BankAccount</span> {
+    <span class="kw">private double</span> balance;
 
-        <div class="tab-content" id="oc-mistakes">
-          <h2>Classic Beginner Mistakes</h2>
-          <div class="callout danger">
-            <div class="callout-title">Mistake 1 — Shadowing without this</div>
-            <pre style="margin:0.5rem 0;padding:0.75rem"><code><span class="kw">public</span> <span class="fn">Dog</span>(<span class="tp">String</span> name) {
-    name = name; <span class="cm">// BUG: assigns parameter to itself!</span>
-    <span class="cm">// the field 'name' is NEVER set</span>
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+
+    <span class="kw">public void</span> <span class="fn">setBalance</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount &lt; <span class="nm">0</span>) <span class="kw">throw new</span> IllegalArgumentException(<span class="st">"Negative!"</span>);
+        balance = amount;
+    }
 }</code></pre>
-            <p style="margin-top:0.5rem;font-size:13.5px">Fix: use <code>this.name = name;</code></p>
-          </div>
-          <div class="callout danger">
-            <div class="callout-title">Mistake 2 — Forgetting to call new</div>
-            <pre style="margin:0.5rem 0;padding:0.75rem"><code><span class="tp">Dog</span> myDog;         <span class="cm">// declares variable — but NO object exists!</span>
-myDog.<span class="fn">bark</span>();      <span class="cm">// NullPointerException at runtime</span></code></pre>
-            <p style="margin-top:0.5rem;font-size:13.5px">Fix: <code>Dog myDog = new Dog("Rex", "Lab");</code></p>
-          </div>
-          <div class="callout danger">
-            <div class="callout-title">Mistake 3 — Public fields</div>
-            <pre style="margin:0.5rem 0;padding:0.75rem"><code><span class="kw">public</span> <span class="tp">String</span> name; <span class="cm">// anyone can do: myDog.name = null;</span></code></pre>
-            <p style="margin-top:0.5rem;font-size:13.5px">Always make fields <code>private</code>. Expose them only through methods.</p>
-          </div>
-        </div>
+<div class="callout"><div class="callout-title">Future-proof</div>Even a trivial getter/setter is valuable. Tomorrow you might add validation, fire notifications, or change internal representation. All callers use the method — you change one place.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">A <code>BankAccount</code> class has <code>public double balance</code>. Name two concrete problems this causes.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">1. Anyone can write <code>account.balance = -99999</code> — no validation possible. 2. If you later change how balance is stored internally (e.g. in cents), every single caller that accesses <code>.balance</code> directly must be updated. A getter isolates that change to one place.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128274;</div><div class="hook-text"><strong>Memory Hook:</strong> Encapsulation = vault. Only the teller (public methods) can access the vault (private fields). You define the rules.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('oc')">&#8592; Objects &amp; Classes</button><button class="btn primary" onclick="markDone('enc');show('inh')">Next: Inheritance &#8594;</button></div>
+</div>
 
-        <div class="tab-content" id="oc-quiz">
-          <div class="quiz-section">
-            <div class="quiz-title">Active Recall · Objects &amp; Classes</div>
-            <div class="quiz-q">1. What is the difference between a class and an object? Give a real-world analogy.</div>
-            <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-            <div class="answer-box">A class is a <strong>blueprint</strong> (template). An object is a <strong>concrete instance</strong> created from that blueprint. Analogy: a class is like a cookie cutter; an object is a cookie. The cutter defines the shape, but each cookie can have different frosting (field values).</div>
-          </div>
-          <div class="quiz-section">
-            <div class="quiz-title">Predict the Output</div>
-            <div class="quiz-q">What does this code print?
-<pre style="margin:0.75rem 0"><code><span class="tp">Dog</span> a = <span class="kw">new</span> <span class="fn">Dog</span>(<span class="st">"Rex"</span>, <span class="st">"Lab"</span>);
-<span class="tp">Dog</span> b = <span class="kw">new</span> <span class="fn">Dog</span>(<span class="st">"Max"</span>, <span class="st">"Poodle"</span>);
-a.<span class="fn">bark</span>();
-b.<span class="fn">bark</span>();
-a.<span class="fn">bark</span>();</code></pre></div>
-            <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-            <div class="answer-box">Rex: Woof!<br>Max: Woof!<br>Rex: Woof!<br><br>Each object has its own state. <code>a</code> and <code>b</code> are independent objects — calling <code>bark()</code> on each uses that object's own <code>name</code> field.</div>
-          </div>
-          <div class="quiz-section">
-            <div class="quiz-title">Coding Challenge</div>
-            <div class="quiz-q">Write a <code>Car</code> class with fields <code>brand</code> (String), <code>speed</code> (int), and <code>running</code> (boolean). Add a constructor, a <code>start()</code> method that sets running to true and prints the brand, and a <code>accelerate(int amount)</code> method that adds to speed if running.</div>
-            <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-            <div class="answer-box"><pre style="padding:0.75rem"><code><span class="kw">public class</span> <span class="tp">Car</span> {
-    <span class="kw">private</span> <span class="tp">String</span> brand;
-    <span class="kw">private int</span> speed;
-    <span class="kw">private boolean</span> running;
-
-    <span class="kw">public</span> <span class="fn">Car</span>(<span class="tp">String</span> brand) {
-        <span class="kw">this</span>.brand = brand;
-        <span class="kw">this</span>.speed = <span class="nm">0</span>;
-        <span class="kw">this</span>.running = <span class="kw">false</span>;
-    }
-
-    <span class="kw">public void</span> <span class="fn">start</span>() {
-        running = <span class="kw">true</span>;
-        System.out.println(brand + <span class="st">" started."</span>);
-    }
-
-    <span class="kw">public void</span> <span class="fn">accelerate</span>(<span class="kw">int</span> amount) {
-        <span class="kw">if</span> (running) speed += amount;
-    }
-}</code></pre></div>
-          </div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🔑</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> CLASS = Cookie Cutter (one, defines shape). OBJECT = Cookie (many, each with own filling). FIELD = filling flavour. METHOD = what the cookie does when you eat it.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('roadmap')">← Roadmap</button>
-          <button class="btn primary" onclick="markDone('objects-classes');show('encapsulation')">Next: Encapsulation →</button>
-        </div>
-      </div>
-
-      <!-- ENCAPSULATION -->
-      <div class="topic-page" id="page-encapsulation">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 02 · Foundation</div>
-          <h1>Encapsulation</h1>
-          <p style="color:var(--muted)">Control what others can see. Treat your class like a black box.</p>
-          <div><span class="tag concept">Access Modifiers</span><span class="tag concept">Getters</span><span class="tag concept">Setters</span></div>
-        </div>
-
-        <h2>The Big Idea</h2>
-        <p>Encapsulation is about <strong>hiding implementation details</strong> and only exposing a clean, controlled interface. Think about a TV remote: you press "volume up" — you don't need to know about capacitors and transistors inside. The internals are hidden. Only the buttons (the interface) are exposed.</p>
-        <p>In OOP this means: <strong>fields are always private</strong>. If someone outside needs to read or change them, they go through dedicated methods (getters/setters) that you control.</p>
-
-        <h2>Access Modifiers — The Four Options</h2>
-        <table>
-          <tr><th>Modifier</th><th>Who can access</th><th>When to use</th></tr>
-          <tr><td><code style="color:var(--accent3)">private</code></td><td>Only this class</td><td>Always for fields. Default choice for methods.</td></tr>
-          <tr><td><code style="color:var(--accent2)">protected</code></td><td>This class + subclasses + same package</td><td>When subclasses need direct field access (use sparingly)</td></tr>
-          <tr><td><code style="color:var(--accent)">public</code></td><td>Everyone</td><td>Methods that form the public API. Never for fields.</td></tr>
-          <tr><td><em>none</em></td><td>Same package only</td><td>Avoid — breaks when you move classes to another package</td></tr>
-        </table>
-
-        <div class="callout">
-          <div class="callout-title">Golden Rule</div>
-          Give everything the <strong>strictest possible access</strong>. Start with private. Only make something less-private when you have a concrete reason to.
-        </div>
-
-        <h2>Getters &amp; Setters — Why Bother?</h2>
-        <p>It might seem pointless to have <code>getAge()</code> that just returns a field. But consider: later you need to store age in months instead of years. If you used a getter all along, the fix is trivial:</p>
-        <pre><code><span class="cm">// Before: age in years</span>
-<span class="kw">public int</span> <span class="fn">getAge</span>() { <span class="kw">return</span> age; }
-
-<span class="cm">// After: age stored internally as months — zero callers need to change!</span>
-<span class="kw">public int</span> <span class="fn">getAge</span>() { <span class="kw">return</span> age / <span class="nm">12</span>; }</code></pre>
-        <p>Setters let you add validation logic:</p>
-        <pre><code><span class="kw">public void</span> <span class="fn">setAge</span>(<span class="kw">int</span> newAge) {
-    <span class="kw">if</span> (newAge &lt; <span class="nm">0</span>) <span class="kw">throw new</span> IllegalArgumentException(<span class="st">"Age can't be negative"</span>);
-    age = newAge;
-    <span class="fn">recalculateFood</span>(); <span class="cm">// side-effect — only possible because of the setter</span>
-}</code></pre>
-
-        <div class="callout warn">
-          <div class="callout-title">When NOT to add setters</div>
-          If a field should never change after construction, use <code>final</code> and only add a getter. Not every field needs a setter — adding one opens a door to mutation you may not want.
-        </div>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Active Recall · Encapsulation</div>
-          <div class="quiz-q">Why would you add a setter even when the logic is trivial — i.e. it just sets the field directly without any validation?</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box">Because the setter acts as a <strong>future-proof contract</strong>. Today it's trivial. Tomorrow you might add validation, fire an Observer notification (<code>notifyObservers()</code>), or change how the data is internally represented. If all callers use the setter, you only change one place. If they access the field directly, you'd have to update every single caller.</div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🔒</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Encapsulation = TV remote. Internals hidden, only buttons exposed. FIELD = circuit board (private). GETTER/SETTER = button (public). You control what each button does.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('objects-classes')">← Objects &amp; Classes</button>
-          <button class="btn primary" onclick="markDone('encapsulation');show('inheritance')">Next: Inheritance →</button>
-        </div>
-      </div>
-
-      <!-- INHERITANCE -->
-      <div class="topic-page" id="page-inheritance">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 03 · Hierarchy</div>
-          <h1>Inheritance</h1>
-          <p style="color:var(--muted)">Reuse code by making classes build on each other. The "is-a" relationship.</p>
-          <div><span class="tag java">extends</span><span class="tag java">super</span><span class="tag concept">is-a</span><span class="tag concept">@Override</span></div>
-        </div>
-
-        <h2>The Problem Inheritance Solves</h2>
-        <p>Imagine a <code>Lion</code> class and a <code>Giraffe</code> class. Both have an <code>energy</code> field. Both have an <code>eat(int nutrition)</code> method. Copy-pasting that logic into every animal class is a nightmare: if you find a bug in <code>eat()</code>, you must fix it in every class. This violates the <strong>DRY principle</strong> (Don't Repeat Yourself).</p>
-        <p>Inheritance lets you extract the common parts into a <strong>parent class</strong> (superclass) and have child classes (subclasses) inherit them automatically.</p>
-
-        <div class="diagram">
-Before inheritance:              After inheritance:
-                                 <span class="hl2">Animal</span> (superclass)
-<span class="hl">Lion</span>         <span class="hl3">Giraffe</span>             ├── energy: int
- energy        energy             └── eat(int nutrition)
- eat()         eat()                      │
- hunt()        lookAtTree()        ┌──────┴──────┐
-               neckLength     <span class="hl">Lion</span>         <span class="hl3">Giraffe</span>
-                               hunt()      lookAtTree()
-                                           neckLength: int
-                                           eat() [OVERRIDDEN]</div>
-
-        <h2>The extends Keyword</h2>
-        <pre><code><span class="kw">public class</span> <span class="tp">Animal</span> {
-    <span class="kw">protected int</span> energy;  <span class="cm">// protected: subclasses can access this</span>
-
-    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> energy) {
-        <span class="kw">this</span>.energy = energy;
-    }
-
-    <span class="kw">public void</span> <span class="fn">eat</span>(<span class="kw">int</span> nutrition) {
-        energy += nutrition;
-    }
+<!-- INHERITANCE -->
+<div class="topic-page" id="page-inh">
+<div class="topic-header"><div class="topic-badge">Topic 03 &middot; Hierarchy</div><h1>Inheritance</h1><p style="color:var(--muted)">Reuse code through is-a hierarchy. Eliminate duplication.</p><div><span class="tag java">extends</span><span class="tag java">super</span><span class="tag java">@Override</span><span class="tag concept">is-a</span></div></div>
+<h2>Big Picture</h2>
+<p>When multiple classes share fields and methods, extract them to a <strong>superclass</strong>. Subclasses <code>extend</code> it and inherit everything automatically. Fix a bug once — every child benefits. This is the DRY principle: Don't Repeat Yourself.</p>
+<div class="diagram">Before: Lion and Giraffe both have energy + eat() — duplicated
+After:
+      Animal (superclass)
+      protected energy: int
+      eat(int nutrition)
+            |
+     +------+------+
+   Lion           Giraffe
+   hunt()         neckLength: int
+                  eat() [OVERRIDDEN]</div>
+<h2>Core Syntax</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">Animal</span> {
+    <span class="kw">protected int</span> energy;
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> e) { energy = e; }
+    <span class="kw">public void</span> <span class="fn">eat</span>(<span class="kw">int</span> n) { energy += n; }
 }
 
-<span class="kw">public class</span> <span class="tp">Lion</span> <span class="kw">extends</span> <span class="tp">Animal</span> {   <span class="cm">// Lion IS-A Animal</span>
-    <span class="kw">public</span> <span class="fn">Lion</span>(<span class="kw">int</span> energy) {
-        <span class="kw">super</span>(energy);  <span class="cm">// MUST call parent constructor first</span>
-    }
-
-    <span class="kw">public void</span> <span class="fn">hunt</span>() {
-        <span class="kw">if</span> (energy &lt; <span class="nm">5</span>) { System.out.println(<span class="st">"Too tired"</span>); <span class="kw">return</span>; }
-        energy -= <span class="nm">5</span>;
-        <span class="fn">eat</span>(<span class="nm">20</span>);  <span class="cm">// inherited from Animal!</span>
-    }
-}</code></pre>
-
-        <h2>Overriding Methods</h2>
-        <p>A subclass can replace a parent method with its own version. The Giraffe's <code>eat()</code> needs to also grow its neck, so it overrides:</p>
-        <pre><code><span class="anno">@Override</span>  <span class="cm">// annotation tells compiler to check you got the signature right</span>
-<span class="kw">public void</span> <span class="fn">eat</span>(<span class="kw">int</span> nutrition) {
-    <span class="kw">super</span>.<span class="fn">eat</span>(nutrition);  <span class="cm">// call the original Animal.eat() first</span>
-    neckLength++;          <span class="cm">// then add Giraffe-specific behaviour</span>
-}</code></pre>
-
-        <div class="callout warn">
-          <div class="callout-title">Is-a vs Has-a — the most important design question</div>
-          Only use inheritance when you can truthfully say "<strong>A is a kind of B</strong>". A Lion IS-A Animal ✓. An Engine is NOT-A Car (it HAS-A relationship). Forcing inheritance on has-a relationships creates brittle, over-coupled code. Use composition (a field) for has-a.
-        </div>
-
-        <div class="callout tip">
-          <div class="callout-title">What is NOT inherited</div>
-          Constructors and private members. Constructors are never inherited — you must write your own and explicitly call <code>super()</code> if needed.
-        </div>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Active Recall · Inheritance</div>
-          <div class="quiz-q">A <code>Professor</code> class and a <code>Student</code> class both have a <code>name</code> and <code>email</code>. You create a <code>Person</code> superclass. The Professor has a <code>teachCourse()</code> method and the Student has a <code>submitAssignment()</code> method. Write the skeleton (no method bodies needed) for all three classes using proper inheritance.</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box"><pre style="padding:0.75rem"><code><span class="kw">public class</span> <span class="tp">Person</span> {
-    <span class="kw">private</span> <span class="tp">String</span> name;
-    <span class="kw">private</span> <span class="tp">String</span> email;
-    <span class="kw">public</span> <span class="fn">Person</span>(<span class="tp">String</span> name, <span class="tp">String</span> email) {
-        <span class="kw">this</span>.name = name; <span class="kw">this</span>.email = email;
-    }
+<span class="kw">public class</span> <span class="tp">Lion</span> <span class="kw">extends</span> <span class="tp">Animal</span> {
+    <span class="kw">public</span> <span class="fn">Lion</span>(<span class="kw">int</span> e) { <span class="kw">super</span>(e); }  <span class="cm">// MUST be first line</span>
+    <span class="kw">public void</span> <span class="fn">hunt</span>() { energy -= <span class="nm">5</span>; <span class="fn">eat</span>(<span class="nm">20</span>); }
 }
-<span class="kw">public class</span> <span class="tp">Professor</span> <span class="kw">extends</span> <span class="tp">Person</span> {
-    <span class="kw">public</span> <span class="fn">Professor</span>(<span class="tp">String</span> name, <span class="tp">String</span> email) { <span class="kw">super</span>(name, email); }
-    <span class="kw">public void</span> <span class="fn">teachCourse</span>() {}
-}
-<span class="kw">public class</span> <span class="tp">Student</span> <span class="kw">extends</span> <span class="tp">Person</span> {
-    <span class="kw">public</span> <span class="fn">Student</span>(<span class="tp">String</span> name, <span class="tp">String</span> email) { <span class="kw">super</span>(name, email); }
-    <span class="kw">public void</span> <span class="fn">submitAssignment</span>() {}
-}</code></pre></div>
-        </div>
 
-        <div class="memory-hook">
-          <div class="hook-icon">🧬</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Inheritance = genetic DNA. Child inherits parent's traits (fields/methods). But child can mutate them (@Override). Constructors are NOT in the DNA — each generation must call <code>super()</code> manually.</div>
-        </div>
+<span class="kw">public class</span> <span class="tp">Giraffe</span> <span class="kw">extends</span> <span class="tp">Animal</span> {
+    <span class="kw">private int</span> neckLength;
+    <span class="kw">public</span> <span class="fn">Giraffe</span>(<span class="kw">int</span> e, <span class="kw">int</span> n) { <span class="kw">super</span>(e); neckLength = n; }
 
-        <div class="nav-btns">
-          <button class="btn" onclick="show('encapsulation')">← Encapsulation</button>
-          <button class="btn primary" onclick="markDone('inheritance');show('polymorphism')">Next: Polymorphism →</button>
-        </div>
-      </div>
-
-      <!-- POLYMORPHISM -->
-      <div class="topic-page" id="page-polymorphism">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 04 · Hierarchy</div>
-          <h1>Polymorphism</h1>
-          <p style="color:var(--muted)">One interface, many forms. The superpower that makes OOP flexible.</p>
-          <div><span class="tag concept">Type Weakening</span><span class="tag concept">Dynamic Dispatch</span><span class="tag java">instanceof</span></div>
-        </div>
-
-        <h2>What is Polymorphism?</h2>
-        <p>Polymorphism means "many forms." In Java, a variable declared as type <code>Animal</code> can hold any object that is a subtype of <code>Animal</code> — Lion, Giraffe, Elephant, whatever. The magic: when you call <code>animal.eat()</code>, Java automatically calls the <strong>correct version</strong> of <code>eat()</code> for the actual runtime type. This is called <strong>dynamic dispatch</strong>.</p>
-
-        <pre><code><span class="tp">Animal</span> mufasa = <span class="kw">new</span> <span class="fn">Lion</span>(<span class="nm">200</span>);     <span class="cm">// compile-type: Animal; runtime type: Lion</span>
-<span class="tp">Animal</span> melman  = <span class="kw">new</span> <span class="fn">Giraffe</span>(<span class="nm">100</span>, <span class="nm">30</span>);
-
-<span class="cm">// Call eat() on both — Java dispatches to the CORRECT override automatically</span>
-mufasa.<span class="fn">eat</span>(<span class="nm">10</span>);   <span class="cm">// calls Animal.eat() — Lion doesn't override eat</span>
-melman.<span class="fn">eat</span>(<span class="nm">10</span>);  <span class="cm">// calls Giraffe.eat() — Giraffe DOES override eat</span></code></pre>
-
-        <h2>The Power: Treating Different Things Uniformly</h2>
-        <pre><code>List&lt;<span class="tp">Animal</span>&gt; zoo = <span class="kw">new</span> ArrayList&lt;&gt;();
-zoo.add(<span class="kw">new</span> <span class="fn">Lion</span>(<span class="nm">200</span>));
-zoo.add(<span class="kw">new</span> <span class="fn">Giraffe</span>(<span class="nm">100</span>, <span class="nm">30</span>));
-zoo.add(<span class="kw">new</span> <span class="fn">Elephant</span>(<span class="nm">500</span>));
-
-<span class="cm">// Feed ALL animals — regardless of actual type</span>
-<span class="kw">for</span> (<span class="tp">Animal</span> a : zoo) {
-    a.<span class="fn">eat</span>(<span class="nm">10</span>);  <span class="cm">// correct eat() called for each — no if-statements needed!</span>
-}</code></pre>
-
-        <div class="callout danger">
-          <div class="callout-title">The instanceof Anti-Pattern</div>
-          <pre style="margin:0.5rem 0;padding:0.75rem"><code><span class="cm">// 🚫 BAD — this defeats the purpose of polymorphism</span>
-<span class="kw">if</span> (animal <span class="kw">instanceof</span> <span class="tp">Lion</span>) { animal.feedPrey(); }
-<span class="kw">else if</span> (animal <span class="kw">instanceof</span> <span class="tp">Giraffe</span>) { animal.feedLeaves(); }</code></pre>
-          Instead, move the logic into an overridden method and let polymorphism handle it. If you catch yourself writing <code>instanceof</code> chains, rethink your class design.
-        </div>
-
-        <h2>What You Lose When You Weaken Type</h2>
-        <pre><code><span class="tp">Animal</span> mufasa = <span class="kw">new</span> <span class="fn">Lion</span>(<span class="nm">200</span>);
-mufasa.<span class="fn">hunt</span>();  <span class="cm">// COMPILE ERROR — Animal has no hunt() method</span>
-                <span class="cm">// Java only sees the declared type (Animal), not Lion</span></code></pre>
-        <p>To get <code>hunt()</code> back, you'd need to cast: <code>((Lion) mufasa).hunt()</code> — but only if you're sure it is actually a Lion at runtime.</p>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Predict the Output</div>
-          <div class="quiz-q">What does this print?
-<pre style="margin:0.75rem 0"><code><span class="kw">class</span> <span class="tp">A</span> {
-    <span class="kw">public void</span> <span class="fn">hello</span>() { System.out.println(<span class="st">"A"</span>); }
-}
-<span class="kw">class</span> <span class="tp">B</span> <span class="kw">extends</span> <span class="tp">A</span> {
     <span class="anno">@Override</span>
-    <span class="kw">public void</span> <span class="fn">hello</span>() { System.out.println(<span class="st">"B"</span>); }
-}
-<span class="tp">A</span> obj = <span class="kw">new</span> <span class="fn">B</span>();
-obj.<span class="fn">hello</span>();</code></pre></div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box"><strong>B</strong><br><br>Even though the variable type is A, the <em>actual runtime object</em> is a B. Java's dynamic dispatch always calls the most-specific overridden version. This is the entire point of polymorphism.</div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🎭</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Polymorphism = actor playing multiple roles. The stage direction says "Animal enters" — but the actor is a Lion. When the director says "eat!", the Lion acts like a Lion, not a generic animal. Compile time sees the role (Animal). Runtime sees the actor (Lion).</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('inheritance')">← Inheritance</button>
-          <button class="btn primary" onclick="markDone('polymorphism');show('constructor-chaining')">Next: Constructor Chaining →</button>
-        </div>
-      </div>
-
-      <!-- CONSTRUCTOR CHAINING -->
-      <div class="topic-page" id="page-constructor-chaining">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 05 · Hierarchy</div>
-          <h1>Constructor Chaining</h1>
-          <p style="color:var(--muted)">Multiple constructors, delegating construction, and the mandatory super() call.</p>
-          <div><span class="tag java">this()</span><span class="tag java">super()</span><span class="tag concept">Construction Order</span></div>
-        </div>
-
-        <h2>Within a Class — this()</h2>
-        <p>You can have multiple constructors (overloading). To avoid repeating initialization logic, one constructor can call another using <code>this(...)</code>. This must be the <strong>first line</strong>.</p>
-        <pre><code><span class="kw">public class</span> <span class="tp">Animal</span> {
-    <span class="kw">private int</span> age, weight;
-
-    <span class="kw">public</span> <span class="fn">Animal</span>() {
-        <span class="kw">this</span>(<span class="nm">5</span>);          <span class="cm">// delegates to Animal(int age)</span>
-    }
-    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age) {
-        <span class="kw">this</span>(age, <span class="nm">20</span>);    <span class="cm">// delegates to Animal(int age, int weight)</span>
-    }
-    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age, <span class="kw">int</span> weight) {
-        <span class="kw">this</span>.age = age;
-        <span class="kw">this</span>.weight = weight;
+    <span class="kw">public void</span> <span class="fn">eat</span>(<span class="kw">int</span> n) {
+        <span class="kw">super</span>.<span class="fn">eat</span>(n);   <span class="cm">// run parent's eat first</span>
+        neckLength++;   <span class="cm">// then add giraffe-specific behaviour</span>
     }
 }</code></pre>
+<table><tr><th>Inherited?</th><th>Yes</th><th>No</th></tr>
+<tr><td>public/protected methods &amp; fields</td><td>&#10003;</td><td></td></tr>
+<tr><td>Constructors</td><td></td><td>&#10007; write your own, call super()</td></tr>
+<tr><td>private members</td><td></td><td>&#10007; hidden from subclass</td></tr></table>
+<div class="callout warn"><div class="callout-title">Is-a vs Has-a</div>Only use inheritance when "A is a KIND OF B" is genuinely true. Lion IS-A Animal &#10003;. A Car is NOT-A Engine — it HAS-A engine. Use a field for has-a.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">What is the difference between <code>private</code> and <code>protected</code>? When do you use <code>protected</code>?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><code>private</code> — only this class. Not even subclasses. <code>protected</code> — this class plus any subclass (and same package). Use <code>protected</code> when a field is shared state that subclasses genuinely need direct access to — like <code>energy</code> in Animal.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#129710;</div><div class="hook-text"><strong>Memory Hook:</strong> Inheritance = DNA. Child inherits parent traits. Can mutate them (@Override). Constructors NOT in DNA — call super() manually.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('enc')">&#8592; Encapsulation</button><button class="btn primary" onclick="markDone('inh');show('poly')">Next: Polymorphism &#8594;</button></div>
+</div>
 
-        <h2>To a Superclass — super()</h2>
-        <p>When extending a class, the <strong>first line</strong> of your constructor must call the superclass constructor using <code>super(...)</code>. Why? Because the superclass fields must be initialised before the subclass can use any of them.</p>
-        <div class="callout warn">
-          <div class="callout-title">The Golden Rule</div>
-          Superclass is ALWAYS constructed before subclass. If you omit <code>super()</code>, Java calls the no-arg default constructor of the parent. If that doesn't exist → compile error.
-        </div>
+<!-- POLYMORPHISM -->
+<div class="topic-page" id="page-poly">
+<div class="topic-header"><div class="topic-badge">Topic 04 &middot; Hierarchy</div><h1>Polymorphism</h1><p style="color:var(--muted)">One call, many behaviours. The engine of flexible OOP.</p><div><span class="tag concept">Dynamic Dispatch</span><span class="tag concept">Type Weakening</span></div></div>
+<h2>Big Picture</h2>
+<p>A variable declared as <code>Animal</code> can hold any subtype. When you call a method, Java automatically runs the <strong>most-specific overridden version</strong> for the actual runtime type. This is dynamic dispatch.</p>
+<div class="diagram">Animal mufasa = new Lion(200);
 
-        <h2>Construction Order — Exam Favourite!</h2>
-        <div class="diagram">
-new <span class="hl3">Giraffe</span>(9, 40) is called:
+Compile time: Java sees Animal  — controls what methods you CAN call
+Runtime:      Java sees Lion    — controls which VERSION runs
 
-1. <span class="hl3">Giraffe(int age, int weight)</span> begins
-2.   → calls <span class="hl2">super(age, weight)</span>
-3.     → <span class="hl2">Animal(int age, int weight)</span> runs first
-4.     → "CONSTRUCT: Animal(int age, int weight)" prints
-5.   → Animal constructor returns
-6. <span class="hl3">Giraffe</span> constructor body continues
-7. → "CONSTRUCT: Giraffe(int age, int weight)" prints
+List&lt;Animal&gt; zoo = ...;
+for (Animal a : zoo) { a.eat(10); }  // correct version for each — no if-statements!</div>
+<pre><code><span class="tp">Animal</span> melman = <span class="kw">new</span> <span class="fn">Giraffe</span>(<span class="nm">100</span>, <span class="nm">30</span>);
+melman.<span class="fn">eat</span>(<span class="nm">10</span>);    <span class="cm">// calls Giraffe's overridden eat() — not Animal's</span>
+melman.<span class="fn">lookAtTree</span>(); <span class="cm">// COMPILE ERROR — Animal type has no lookAtTree()</span></code></pre>
+<div class="callout danger"><div class="callout-title">The instanceof Anti-Pattern</div>Writing <code>if (a instanceof Lion) {...} else if (a instanceof Giraffe) {...}</code> defeats polymorphism entirely. Move behaviour into the class. Let dispatch handle it.</div>
+<div class="quiz-section"><div class="quiz-title">Predict the Output</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">class</span> <span class="tp">A</span> { <span class="kw">public void</span> <span class="fn">hello</span>() { System.out.println(<span class="st">"A"</span>); }}
+<span class="kw">class</span> <span class="tp">B</span> <span class="kw">extends</span> <span class="tp">A</span> { <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">hello</span>() { System.out.println(<span class="st">"B"</span>); }}
+<span class="tp">A</span> obj = <span class="kw">new</span> <span class="fn">B</span>(); obj.<span class="fn">hello</span>();</code></pre></div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>B</strong> — variable type is A, but runtime object is B. Dynamic dispatch always calls the most-specific overridden version. This is the entire point of polymorphism.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#127917;</div><div class="hook-text"><strong>Memory Hook:</strong> Actor playing a role. Stage direction = "Animal enters" (declared type). Actual actor = Lion (runtime type). Director says "eat!" — Lion acts like a Lion, not a generic animal.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('inh')">&#8592; Inheritance</button><button class="btn primary" onclick="markDone('poly');show('cc')">Next: Constructor Chaining &#8594;</button></div>
+</div>
 
-Rule: <span class="hl">parent always finishes before child starts</span></div>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Predict the Output</div>
-          <div class="quiz-q">Given the Animal/Giraffe chain from your reader, what does <code>new Giraffe(7)</code> print? (Giraffe(int age) calls this(age, 20), which calls super(age,weight))</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box">
-            CONSTRUCT: Animal(int age, int weight) — Age: 7, Weight: 20<br>
-            CONSTRUCT: Giraffe(int age, int weight)<br>
-            CONSTRUCT: Giraffe(int age)<br><br>
-            The chain: Giraffe(7) → this(7,20) → Giraffe(7,20) → super(7,20) → Animal(7,20) runs first, then unwinds back up the chain.
-          </div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🏗️</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Constructor chaining = building a skyscraper. You MUST lay the foundation (parent) before the upper floors (child). <code>super()</code> is the foundation pour. Always happens first, no matter what.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('polymorphism')">← Polymorphism</button>
-          <button class="btn primary" onclick="markDone('constructor-chaining');show('abstract-classes')">Next: Abstract Classes →</button>
-        </div>
-      </div>
-
-      <!-- ABSTRACT CLASSES -->
-      <div class="topic-page" id="page-abstract-classes">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 06 · Abstraction</div>
-          <h1>Abstract Classes</h1>
-          <p style="color:var(--muted)">Templates that can never be instantiated directly — they enforce contracts on subclasses.</p>
-          <div><span class="tag java">abstract</span><span class="tag concept">No Instantiation</span><span class="tag concept">Forced Implementation</span></div>
-        </div>
-
-        <h2>The Problem: Generic Concepts That Shouldn't Exist Alone</h2>
-        <p>An "Animal" is a concept — there's no such thing as a plain animal in the real world. Every real animal is a dog, a lion, a giraffe. Yet all animals share common properties (age, weight, gender) and common behaviours (eat, reproduce). This is precisely what abstract classes model.</p>
-        <p>An <strong>abstract class</strong> is a class that <strong>cannot be instantiated directly</strong> (<code>new Animal()</code> would be a compile error). It can only be used as a base to extend from.</p>
-
-        <pre><code><span class="kw">public abstract class</span> <span class="tp">Animal</span> {   <span class="cm">// 'abstract' keyword here</span>
-    <span class="kw">private int</span> age;
-    <span class="kw">private double</span> weight;
-    <span class="kw">private</span> <span class="tp">Gender</span> gender;
-
-    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age, <span class="kw">double</span> weight, <span class="tp">Gender</span> gender) {
-        <span class="kw">this</span>.age = age;
-        <span class="kw">this</span>.weight = weight;
-        <span class="kw">this</span>.gender = gender;
+<!-- CONSTRUCTOR CHAINING -->
+<div class="topic-page" id="page-cc">
+<div class="topic-header"><div class="topic-badge">Topic 05 &middot; Hierarchy</div><h1>Constructor Chaining</h1><p style="color:var(--muted)">Multiple constructors delegating to each other. Guaranteed parent-first order.</p><div><span class="tag java">this()</span><span class="tag java">super()</span><span class="tag concept">Construction Order</span></div></div>
+<h2>Within Class — this()</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">Animal</span> {
+    <span class="kw">public</span> <span class="fn">Animal</span>() { <span class="kw">this</span>(<span class="nm">5</span>); }
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age) { <span class="kw">this</span>(age, <span class="nm">20</span>); }
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age, <span class="kw">int</span> weight) {
+        <span class="kw">this</span>.age = age; <span class="kw">this</span>.weight = weight; <span class="cm">// real work here</span>
     }
+}</code></pre>
+<h2>To Superclass — super()</h2>
+<div class="callout warn"><div class="callout-title">Iron Rule</div>Superclass ALWAYS constructed before subclass. <code>super()</code> must be first line. Cannot have both <code>this()</code> and <code>super()</code> in same constructor.</div>
+<h2>Construction Order — Exam Favourite</h2>
+<div class="diagram">new Giraffe(7) is called:
+  Giraffe(int age) starts  → this(age, 20)
+    Giraffe(int, int) starts → super(age, 20)
+      Animal(int, int) runs FIRST — prints
+    Giraffe(int, int) continues — prints
+  Giraffe(int) continues — prints
 
-    <span class="cm">// Abstract method: no body, subclasses MUST implement</span>
-    <span class="kw">public abstract void</span> <span class="fn">reproduce</span>();
+Rule: deepest constructor runs first, unwinds back up the chain</div>
+<div class="quiz-section"><div class="quiz-title">Predict the Output</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">class</span> <span class="tp">V</span> {
+  <span class="kw">public</span> <span class="fn">V</span>() { <span class="kw">this</span>(<span class="st">"X"</span>); System.out.println(<span class="st">"V()"</span>); }
+  <span class="kw">public</span> <span class="fn">V</span>(<span class="tp">String</span> s) { System.out.println(<span class="st">"V("</span>+s+<span class="st">")"</span>); }
+}
+<span class="kw">class</span> <span class="tp">C</span> <span class="kw">extends</span> <span class="tp">V</span> {
+  <span class="kw">public</span> <span class="fn">C</span>() { <span class="kw">super</span>(<span class="st">"Toyota"</span>); System.out.println(<span class="st">"C()"</span>); }
+}
+<span class="kw">new</span> <span class="fn">C</span>();</code></pre></div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">V(Toyota)<br>C()<br><br>C() calls super("Toyota") first → V("Toyota") prints "V(Toyota)". Then C() continues, prints "C()".</div></div>
+<div class="memory-hook"><div class="hook-icon">&#127959;</div><div class="hook-text"><strong>Memory Hook:</strong> Skyscraper. Foundation (parent) always before upper floors (child). super() = the foundation pour.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('poly')">&#8592; Polymorphism</button><button class="btn primary" onclick="markDone('cc');show('abs')">Next: Abstract Classes &#8594;</button></div>
+</div>
 
-    <span class="cm">// Normal method: subclasses inherit this as-is</span>
-    <span class="kw">public int</span> <span class="fn">getAge</span>() { <span class="kw">return</span> age; }
+<!-- ABSTRACT CLASSES -->
+<div class="topic-page" id="page-abs">
+<div class="topic-header"><div class="topic-badge">Topic 06 &middot; Abstraction</div><h1>Abstract Classes</h1><p style="color:var(--muted)">Templates that cannot be instantiated. Force subclasses to implement contracts.</p><div><span class="tag java">abstract</span><span class="tag concept">No Instantiation</span><span class="tag concept">Enforced Contract</span></div></div>
+<h2>Big Picture</h2>
+<p>A plain "Animal" doesn't exist — every real animal is a Lion, Giraffe, etc. An <strong>abstract class</strong> cannot be instantiated directly. It can have concrete fields/methods (shared logic) and abstract methods (no body — subclasses must implement).</p>
+<pre><code><span class="kw">public abstract class</span> <span class="tp">Animal</span> {
+    <span class="kw">private int</span> age;
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="kw">int</span> age) { <span class="kw">this</span>.age = age; }  <span class="cm">// constructor — called via super()</span>
+    <span class="kw">public int</span> <span class="fn">getAge</span>() { <span class="kw">return</span> age; }          <span class="cm">// concrete — shared by all</span>
+    <span class="kw">public abstract void</span> <span class="fn">reproduce</span>();              <span class="cm">// no body — MUST override</span>
 }
 
-<span class="tp">Animal</span> a = <span class="kw">new</span> <span class="fn">Animal</span>(...); <span class="cm">// COMPILE ERROR — Animal is abstract!</span>
-<span class="tp">Animal</span> a = <span class="kw">new</span> <span class="fn">Lion</span>(...);   <span class="cm">// OK — Lion extends Animal and implements reproduce()</span></code></pre>
+<span class="kw">new</span> <span class="fn">Animal</span>(<span class="nm">5</span>);  <span class="cm">// COMPILE ERROR — abstract</span>
+<span class="kw">new</span> <span class="fn">Lion</span>(<span class="nm">5</span>);   <span class="cm">// OK — Lion implements reproduce()</span></code></pre>
+<table><tr><th>Abstract class can have</th><th>Yes/No</th></tr>
+<tr><td>Fields</td><td>&#10003; Yes</td></tr>
+<tr><td>Constructors (called via super())</td><td>&#10003; Yes</td></tr>
+<tr><td>Concrete methods</td><td>&#10003; Yes</td></tr>
+<tr><td>Abstract methods (no body)</td><td>&#10003; Yes</td></tr>
+<tr><td>Instantiated directly with new</td><td>&#10007; Never</td></tr></table>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">Can an abstract class have a constructor? When does it run and why is it needed?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Yes.</strong> Even though you can't do <code>new Animal()</code>, when you do <code>new Lion(...)</code>, Lion's constructor calls <code>super(...)</code> which runs Animal's constructor to initialise Animal's private fields. Without it there's no way to set the parent's private state.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128208;</div><div class="hook-text"><strong>Memory Hook:</strong> Abstract class = architectural blueprint that can never be a building alone. Defines what MUST exist (abstract methods) and what already works (concrete methods/fields).</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('cc')">&#8592; Constructor Chaining</button><button class="btn primary" onclick="markDone('abs');show('iface')">Next: Interfaces &#8594;</button></div>
+</div>
 
-        <h2>Abstract Methods — The Enforcement Contract</h2>
-        <p>An abstract method has <em>no body</em>. When a concrete class extends the abstract class, it <strong>must implement every abstract method</strong> — otherwise it also becomes abstract (and can't be instantiated). This forces subclasses to provide their own specific behaviour.</p>
+<!-- INTERFACES -->
+<div class="topic-page" id="page-iface">
+<div class="topic-header"><div class="topic-badge">Topic 07 &middot; Abstraction</div><h1>Interfaces</h1><p style="color:var(--muted)">Shared capabilities for unrelated classes. The is-capable-of relationship.</p><div><span class="tag java">interface</span><span class="tag java">implements</span><span class="tag concept">is-capable-of</span></div></div>
+<h2>Big Picture</h2>
+<p>A Dog, Vehicle, and Baby can all make noise but share no sensible ancestor. An <strong>interface</strong> defines a capability contract any class can adopt. A class can implement <strong>multiple</strong> interfaces (Java forbids extending multiple classes).</p>
+<pre><code><span class="kw">public interface</span> <span class="tp">NoiseMaker</span> {
+    <span class="kw">void</span> <span class="fn">makeNoise</span>();  <span class="cm">// implicitly public abstract</span>
+}
 
-        <div class="callout tip">
-          <div class="callout-title">Enum Bonus</div>
-          Your reader uses <code>Gender</code>, <code>Family</code>, <code>Species</code> as enums. An enum is a type with a fixed set of named constants. Pattern: <code>public enum Gender &#123; MALE, FEMALE, OTHER &#125;</code>. Much safer than using raw Strings for categorical values — the compiler can check them.
-        </div>
-
-        <div class="diagram">
-<span class="hl2">abstract Animal</span>
-  age, weight, gender       ← concrete fields (shared state)
-  getAge(), getWeight()     ← concrete methods (shared behaviour)
-  reproduce()               ← abstract method (NO body, MUST override)
-          │
-    ┌─────┴──────┐
-  <span class="hl">Lion</span>          <span class="hl3">Giraffe</span>
-  reproduce() → { ...lion specific... }
-                reproduce() → { ...giraffe specific... }</div>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Active Recall · Abstract Classes</div>
-          <div class="quiz-q">Can an abstract class have a constructor? If so, when does it get called and why?</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box"><strong>Yes.</strong> Abstract classes can (and often should) have constructors. They're called via <code>super()</code> from the concrete subclass constructor. Even though you can never do <code>new Animal()</code> directly, when you do <code>new Lion(...)</code>, the Lion constructor calls <code>super(...)</code> which runs Animal's constructor to initialize the shared fields (age, weight, gender).</div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">📐</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Abstract class = architectural blueprint that can never become a building alone. It defines what MUST be present (abstract methods) and what already exists (concrete methods/fields). Subclasses are the actual buildings built from it.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('constructor-chaining')">← Constructor Chaining</button>
-          <button class="btn primary" onclick="markDone('abstract-classes');show('interfaces')">Next: Interfaces →</button>
-        </div>
-      </div>
-
-      <!-- INTERFACES -->
-      <div class="topic-page" id="page-interfaces">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 07 · Abstraction</div>
-          <h1>Interfaces</h1>
-          <p style="color:var(--muted)">Shared capabilities for completely unrelated classes. The "is-capable-of" relationship.</p>
-          <div><span class="tag java">interface</span><span class="tag java">implements</span><span class="tag concept">is-capable-of</span></div>
-        </div>
-
-        <h2>The Problem Interfaces Solve</h2>
-        <p>Sometimes completely unrelated classes need to share a capability. A <code>Vehicle</code>, a <code>Dog</code>, and a <code>Baby</code> can all make noise. They have nothing else in common — there's no sensible superclass. You can't say "a vehicle is a kind of noise-maker organism." But you <em>can</em> say "a vehicle <strong>is capable of</strong> making noise."</p>
-        <p>An interface defines a set of method signatures (no bodies) that any class can choose to implement. It's a contract: "I guarantee I have this behaviour."</p>
-
-        <pre><code><span class="kw">public interface</span> <span class="tp">NoiseMaker</span> {
-    <span class="kw">void</span> <span class="fn">makeNoise</span>();  <span class="cm">// no body — just the signature</span>
+<span class="kw">public class</span> <span class="tp">Dog</span> <span class="kw">extends</span> <span class="tp">Animal</span> <span class="kw">implements</span> <span class="tp">NoiseMaker</span> {
+    <span class="anno">@Override</span>
+    <span class="kw">public void</span> <span class="fn">makeNoise</span>() { System.out.println(<span class="st">"Woof!"</span>); }
 }
 
 <span class="kw">public class</span> <span class="tp">Vehicle</span> <span class="kw">implements</span> <span class="tp">NoiseMaker</span> {
     <span class="anno">@Override</span>
-    <span class="kw">public void</span> <span class="fn">makeNoise</span>() {
-        System.out.println(<span class="st">"Vroom! Vroom!"</span>);
-    }
+    <span class="kw">public void</span> <span class="fn">makeNoise</span>() { System.out.println(<span class="st">"Vroom!"</span>); }
 }
 
-<span class="kw">public class</span> <span class="tp">Dog</span> <span class="kw">implements</span> <span class="tp">NoiseMaker</span> {
-    <span class="anno">@Override</span>
-    <span class="kw">public void</span> <span class="fn">makeNoise</span>() {
-        System.out.println(<span class="st">"Woof!"</span>);
-    }
-}</code></pre>
-
-        <h2>Using Interfaces as Types</h2>
-        <pre><code>List&lt;<span class="tp">NoiseMaker</span>&gt; noisy = <span class="kw">new</span> ArrayList&lt;&gt;();
-noisy.add(<span class="kw">new</span> <span class="fn">Vehicle</span>());
-noisy.add(<span class="kw">new</span> <span class="fn">Dog</span>());
-noisy.add(<span class="kw">new</span> <span class="fn">Baby</span>());
-
-<span class="kw">for</span> (<span class="tp">NoiseMaker</span> n : noisy) {
-    n.<span class="fn">makeNoise</span>();  <span class="cm">// correct version called for each — polymorphism again!</span>
-}</code></pre>
-
-        <h2>A class can implement multiple interfaces</h2>
-        <pre><code><span class="kw">public class</span> <span class="tp">Dog</span> <span class="kw">implements</span> <span class="tp">NoiseMaker</span>, <span class="tp">Serializable</span>, <span class="tp">Comparable</span>&lt;<span class="tp">Dog</span>&gt; {
-    <span class="cm">// must implement methods from ALL three interfaces</span>
-}</code></pre>
-        <p>Java does not allow a class to extend multiple classes (single inheritance), but it can implement as many interfaces as needed.</p>
-
-        <div class="quiz-section">
-          <div class="quiz-title">Active Recall · Interfaces</div>
-          <div class="quiz-q">Your assignment has a <code>Door</code> class that can be inspected. Should <code>Inspectable</code> be an abstract class or an interface? State the rule you used to decide.</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box"><strong>Interface.</strong><br><br>Use the rule: "A is a kind of B" → abstract class. "A is capable of [B]" → interface.<br><br>A Door is <em>capable of being inspected</em> — it is NOT "a kind of Inspectable". The is-a test fails. Therefore <code>Inspectable</code> is an interface, and Door implements it. Other unrelated classes (Chest, NPC) can also implement Inspectable without any inheritance relationship between them.</div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🔌</div>
-          <div class="hook-text"><strong>Memory Hook:</strong> Interface = electrical socket standard. The socket (interface) defines the shape. Any device (class) that fits the shape can be plugged in. A lamp and a phone are completely different things, but both are "pluggable." Abstract class = family. Interface = profession.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('abstract-classes')">← Abstract Classes</button>
-          <button class="btn primary" onclick="markDone('interfaces');show('comparison')">Next: Comparison &amp; Review →</button>
-        </div>
-      </div>
-
-      <!-- COMPARISON -->
-      <div class="topic-page" id="page-comparison">
-        <div class="topic-header">
-          <div class="topic-badge">Topic 08 · Mastery</div>
-          <h1>Comparison &amp; Review</h1>
-          <p style="color:var(--muted)">The decisive comparisons — when to use each tool, and why.</p>
-        </div>
-
-        <h2>Abstract Class vs Interface</h2>
-        <table>
-          <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
-          <tr><td>Can have fields</td><td>✓ Yes</td><td>✗ No (only constants)</td></tr>
-          <tr><td>Can have constructors</td><td>✓ Yes</td><td>✗ No</td></tr>
-          <tr><td>Can have concrete methods</td><td>✓ Yes</td><td>Since Java 8: default methods</td></tr>
-          <tr><td>A class can extend</td><td>One only</td><td>Multiple interfaces</td></tr>
-          <tr><td>Relationship</td><td>"is-a" (Lion is-a Animal)</td><td>"is-capable-of" (Dog is-capable-of making noise)</td></tr>
-          <tr><td>When to use</td><td>Shared state + partial implementation</td><td>Pure behaviour contract, unrelated classes</td></tr>
-        </table>
-
-        <h2>Inheritance vs Composition</h2>
-        <table>
-          <tr><th>Question</th><th>Use Inheritance</th><th>Use Composition</th></tr>
-          <tr><td>Is the relation</td><td>"is-a" (Lion is-a Animal)</td><td>"has-a" (Car has-a Engine)</td></tr>
-          <tr><td>Coupling</td><td>Strong (child depends on parent internals)</td><td>Loose (objects interact via interface)</td></tr>
-          <tr><td>Flexibility</td><td>Lower (hierarchy is fixed)</td><td>Higher (swap implementations at runtime)</td></tr>
-          <tr><td>Code reuse</td><td>Automatic via extends</td><td>Via delegation (call the held object's methods)</td></tr>
-        </table>
-
-        <h2>The Four Pillars — Cheat Sheet</h2>
-        <table>
-          <tr><th>Pillar</th><th>One-liner</th><th>Key Java mechanism</th></tr>
-          <tr><td><strong>Encapsulation</strong></td><td>Hide internals, expose interface</td><td>private fields, getters/setters</td></tr>
-          <tr><td><strong>Inheritance</strong></td><td>Reuse via is-a hierarchy</td><td>extends, super, @Override</td></tr>
-          <tr><td><strong>Polymorphism</strong></td><td>One call, many behaviours</td><td>Type weakening, dynamic dispatch</td></tr>
-          <tr><td><strong>Abstraction</strong></td><td>Define what, not how</td><td>abstract class, interface</td></tr>
-        </table>
-
-        <h2>Final Mini Challenge</h2>
-        <div class="quiz-section">
-          <div class="quiz-title">Design Question</div>
-          <div class="quiz-q">Design the skeleton of a simple RPG system with: <br>• A <code>Character</code> abstract class (name, health, attack())<br>• A <code>Warrior</code> and <code>Mage</code> that extend it<br>• A <code>Serializable</code>-like interface called <code>Saveable</code> with a method <code>save()</code><br>• Make both Warrior and Mage saveable<br><br>What is the type of each field? Which methods are abstract? Sketch the hierarchy.</div>
-          <button class="answer-toggle" onclick="toggleAnswer(this)">▸ reveal answer</button>
-          <div class="answer-box"><pre style="padding:0.75rem"><code><span class="kw">public interface</span> <span class="tp">Saveable</span> { <span class="kw">void</span> <span class="fn">save</span>(); }
-
-<span class="kw">public abstract class</span> <span class="tp">Character</span> {
-    <span class="kw">private</span> <span class="tp">String</span> name;
-    <span class="kw">private int</span> health;
-    <span class="kw">public</span> <span class="fn">Character</span>(<span class="tp">String</span> name, <span class="kw">int</span> health) {
-        <span class="kw">this</span>.name=name; <span class="kw">this</span>.health=health;
-    }
-    <span class="kw">public abstract void</span> <span class="fn">attack</span>();
-    <span class="kw">public int</span> <span class="fn">getHealth</span>() { <span class="kw">return</span> health; }
-}
-
-<span class="kw">public class</span> <span class="tp">Warrior</span> <span class="kw">extends</span> <span class="tp">Character</span> <span class="kw">implements</span> <span class="tp">Saveable</span> {
-    <span class="kw">public</span> <span class="fn">Warrior</span>(<span class="tp">String</span> name) { <span class="kw">super</span>(name, <span class="nm">100</span>); }
-    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">attack</span>() { System.out.println(<span class="st">"Sword slash!"</span>); }
-    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">save</span>() { System.out.println(<span class="st">"Saving Warrior..."</span>); }
-}
-
-<span class="kw">public class</span> <span class="tp">Mage</span> <span class="kw">extends</span> <span class="tp">Character</span> <span class="kw">implements</span> <span class="tp">Saveable</span> {
-    <span class="kw">public</span> <span class="fn">Mage</span>(<span class="tp">String</span> name) { <span class="kw">super</span>(name, <span class="nm">60</span>); }
-    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">attack</span>() { System.out.println(<span class="st">"Fireball!"</span>); }
-    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">save</span>() { System.out.println(<span class="st">"Saving Mage..."</span>); }
-}</code></pre></div>
-        </div>
-
-        <div class="memory-hook">
-          <div class="hook-icon">🏆</div>
-          <div class="hook-text"><strong>Final Memory Hook:</strong> OOP = managing complexity. Class = blueprint. Object = instance. Encapsulation = lock box. Inheritance = family tree. Polymorphism = actor in multiple roles. Abstract class = unfinished blueprint. Interface = skill badge.</div>
-        </div>
-
-        <div class="nav-btns">
-          <button class="btn" onclick="show('interfaces')">← Interfaces</button>
-          <button class="btn primary" onclick="markDone('comparison');show('roadmap')">← Back to Roadmap</button>
-        </div>
-      </div>
-
-    </div><!-- /content -->
-  </main>
+List&lt;<span class="tp">NoiseMaker</span>&gt; list = ...; <span class="cm">// Dog and Vehicle in same list — polymorphism!</span>
+<span class="kw">for</span> (<span class="tp">NoiseMaker</span> n : list) n.<span class="fn">makeNoise</span>();</code></pre>
+<h2>Abstract Class vs Interface</h2>
+<table><tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+<tr><td>Fields</td><td>&#10003; Yes</td><td>&#10007; No (constants only)</td></tr>
+<tr><td>Constructors</td><td>&#10003; Yes</td><td>&#10007; No</td></tr>
+<tr><td>Concrete methods</td><td>&#10003; Yes</td><td>&#10003; default only (Java 8+)</td></tr>
+<tr><td>A class can use</td><td>One (extends)</td><td>Many (implements)</td></tr>
+<tr><td>Relationship</td><td>is-a</td><td>is-capable-of</td></tr></table>
+<div class="callout tip"><div class="callout-title">Decision Rule</div>"A <strong>is a kind of</strong> B" &#8594; abstract class. "A <strong>is capable of</strong> doing B" &#8594; interface.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">(a) Flyable — Bird, Plane, Superman. (b) Vertebrate — Fish, Amphibian, Mammal. (c) Printable — Document, Image, Receipt. Abstract class or interface for each?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">(a) <strong>Interface</strong> — unrelated classes, pure capability. (b) <strong>Abstract class</strong> — genuine is-a, shared biological state. (c) <strong>Interface</strong> — unrelated classes, pure capability contract.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128268;</div><div class="hook-text"><strong>Memory Hook:</strong> Interface = electrical socket standard. Any matching device can plug in. Abstract class = family. Interface = professional skill.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('abs')">&#8592; Abstract Classes</button><button class="btn primary" onclick="markDone('iface');show('cohcoup')">Next: Cohesion &amp; Coupling &#8594;</button></div>
 </div>
 
-<script>
-const topics = ['objects-classes','encapsulation','inheritance','polymorphism','constructor-chaining','abstract-classes','interfaces','comparison'];
-const done = new Set();
-const checklistItems = [
-  'Explain the difference between a class and an object',
-  'Write a class with private fields, a constructor, and methods',
-  'Explain why fields should be private',
-  'Write a getter and setter, explain why they are useful',
-  'Create a subclass using extends and call super()',
-  'Override a method with @Override',
-  'Explain the is-a vs has-a distinction',
-  'Explain what dynamic dispatch means',
-  'Predict constructor chaining output correctly',
-  'Write an abstract class with an abstract method',
-  'Write an interface and implement it in two unrelated classes',
-  'Decide when to use abstract class vs interface',
-  'Spot and fix the instanceof anti-pattern',
-  'Explain all four access modifiers and when to use each'
-];
+<!-- COHESION & COUPLING -->
+<div class="topic-page" id="page-cohcoup">
+<div class="topic-header"><div class="topic-badge">Topic 08 &middot; Design Quality</div><h1>Cohesion &amp; Coupling</h1><p style="color:var(--muted)">The two measuring sticks of good software design.</p><div><span class="tag concept">High Cohesion</span><span class="tag concept">Low Coupling</span><span class="tag concept">SRP</span></div></div>
+<h2>Cohesion — Inside a Class</h2>
+<p>Measures how closely related everything inside a single class is.</p>
+<div class="callout danger"><div class="callout-title">Low Cohesion — BAD</div><code>BankOperations</code> creates accounts, sends emails, calculates loans, prints receipts. Four unrelated responsibilities. Any change in any system forces edits here.</div>
+<div class="callout tip"><div class="callout-title">High Cohesion — GOOD</div><code>AccountService</code> only manages accounts. <code>EmailService</code> only handles email. Each class has one reason to change — the Single Responsibility Principle.</div>
+<h2>Coupling — Between Classes</h2>
+<p>Measures how much one class depends on or knows about another class's internals.</p>
+<table><tr><th>Type</th><th>Description</th><th>Rating</th></tr>
+<tr><td>Content</td><td>Directly accesses another class's private fields</td><td style="color:#e24b4a">Worst</td></tr>
+<tr><td>Common</td><td>Multiple classes share the same global data</td><td style="color:var(--accent3)">Bad</td></tr>
+<tr><td>Control</td><td>Passes flags to control another class's logic</td><td style="color:var(--accent3)">Bad</td></tr>
+<tr><td>External</td><td>Depends directly on external APIs/tools</td><td style="color:var(--accent4)">Moderate</td></tr>
+<tr><td>Data</td><td>Only shares data through method parameters</td><td style="color:var(--accent2)">Best</td></tr></table>
+<h2>The Master Rule</h2>
+<table><tr><th>Aspect</th><th>Cohesion</th><th>Coupling</th></tr>
+<tr><td>High is</td><td style="color:var(--accent2)">&#10003; GOOD</td><td style="color:#e24b4a">&#10007; BAD</td></tr>
+<tr><td>Low is</td><td style="color:#e24b4a">&#10007; BAD</td><td style="color:var(--accent2)">&#10003; GOOD</td></tr>
+<tr><td>Goal</td><td>One class, one purpose</td><td>Independent modules</td></tr>
+<tr><td>Design hint</td><td>Single Responsibility Principle</td><td>Communicate through interfaces</td></tr></table>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q"><code>StudentManager</code> handles login, sends emails, writes to database, calculates grades. What is wrong and how do you fix it?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Low cohesion</strong> — 4 unrelated responsibilities, violates Single Responsibility Principle. Fix: split into <code>AuthService</code> (login), <code>EmailService</code> (email), <code>DatabaseService</code> (persistence), <code>GradeCalculator</code> (grades). Each now has one reason to change. This also improves coupling — each class is independent.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#9878;</div><div class="hook-text"><strong>Memory Hook:</strong> "Cohesion HIGH is great. Coupling LOW is great." Inside: tight and focused. Between: loose and independent.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('iface')">&#8592; Interfaces</button><button class="btn primary" onclick="markDone('cohcoup');show('mvc')">Next: MVC &#8594;</button></div>
+</div>
 
-function buildChecklist() {
-  const el = document.getElementById('checklist');
-  el.innerHTML = checklistItems.map((item,i) => `
-    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;padding:4px 0;color:var(--muted)">
-      <input type="checkbox" id="chk${i}" style="accent-color:var(--accent2);width:14px;height:14px">
+<!-- MVC -->
+<div class="topic-page" id="page-mvc">
+<div class="topic-header"><div class="topic-badge">Topic 09 &middot; Design Patterns</div><h1>MVC — Model View Controller</h1><p style="color:var(--muted)">Separate data, display, and input into three independent layers.</p><div><span class="tag pattern">Architectural</span><span class="tag concept">Separation of Concerns</span></div></div>
+<h2>Big Picture</h2>
+<p>As programs grow, data logic, display logic, and input handling tangle together. MVC separates them into three independent layers used in every web app, desktop GUI, and mobile app.</p>
+<div class="diagram">MODEL      → data and business logic (BankAccount — no UI knowledge)
+VIEW       → display only (BalanceScreen — no business logic)
+CONTROLLER → user input, coordinates Model and View
+
+Flow: USER → Controller → updates Model → Controller → refreshes View
+
+Bank analogy:
+  YOU → Clerk (Controller) → Account (Model) → Receipt (View)</div>
+<pre><code><span class="kw">public class</span> <span class="tp">BankAccount</span> {           <span class="cm">// MODEL</span>
+    <span class="kw">private double</span> balance;
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> a) { balance += a; }
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+}
+<span class="kw">public class</span> <span class="tp">AccountView</span> {           <span class="cm">// VIEW</span>
+    <span class="kw">public void</span> <span class="fn">show</span>(<span class="kw">double</span> b) { System.out.println(<span class="st">"Balance: "</span>+b); }
+}
+<span class="kw">public class</span> <span class="tp">AccountController</span> {    <span class="cm">// CONTROLLER</span>
+    <span class="kw">private</span> <span class="tp">BankAccount</span> model;
+    <span class="kw">private</span> <span class="tp">AccountView</span> view;
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> amount) {
+        model.<span class="fn">deposit</span>(amount);
+        view.<span class="fn">show</span>(model.<span class="fn">getBalance</span>());
+    }
+}</code></pre>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">User clicks "deposit" in a banking app. Trace the exact sequence through MVC — which component does what and in what order?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">1. Click &#8594; <strong>Controller</strong> receives event. 2. Controller calls <code>model.deposit(amount)</code> &#8594; <strong>Model</strong> updates balance. 3. Controller calls <code>view.show(model.getBalance())</code> &#8594; <strong>View</strong> refreshes. Model never talks to View directly. View never talks to Model directly.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#127978;</div><div class="hook-text"><strong>Memory Hook:</strong> Bank visit. YOU = user. CLERK = Controller. ACCOUNT = Model. RECEIPT = View.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('cohcoup')">&#8592; Cohesion &amp; Coupling</button><button class="btn primary" onclick="markDone('mvc');show('sing')">Next: Singleton &#8594;</button></div>
+</div>
+
+<!-- SINGLETON -->
+<div class="topic-page" id="page-sing">
+<div class="topic-header"><div class="topic-badge">Topic 10 &middot; Design Patterns &middot; Creational</div><h1>Singleton Pattern</h1><p style="color:var(--muted)">Guarantee exactly one instance. Global access point.</p><div><span class="tag pattern">Creational</span><span class="tag java">static</span><span class="tag concept">Lazy Init</span></div></div>
+<h2>Three Mechanisms</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">BankConfig</span> {
+    <span class="kw">private static</span> <span class="tp">BankConfig</span> instance;       <span class="cm">// 1. static variable</span>
+    <span class="kw">private</span> <span class="fn">BankConfig</span>() { interestRate=<span class="nm">0.05</span>; } <span class="cm">// 2. private constructor</span>
+    <span class="kw">private double</span> interestRate;
+
+    <span class="kw">public static</span> <span class="tp">BankConfig</span> <span class="fn">getInstance</span>() {   <span class="cm">// 3. one access point</span>
+        <span class="kw">if</span> (instance == <span class="kw">null</span>) instance = <span class="kw">new</span> <span class="fn">BankConfig</span>();
+        <span class="kw">return</span> instance;  <span class="cm">// always same object</span>
+    }
+    <span class="kw">public double</span> <span class="fn">getInterestRate</span>() { <span class="kw">return</span> interestRate; }
+}</code></pre>
+<table><tr><th>Benefits</th><th>Limitations</th></tr>
+<tr><td>Global access point</td><td>Tightly couples code</td></tr>
+<tr><td>Controlled instantiation</td><td>Hard to unit test — cannot mock easily</td></tr>
+<tr><td>Consistent shared state</td><td>Concurrency issues</td></tr>
+<tr><td>Lazy initialisation</td><td>Hidden dependencies</td></tr></table>
+<div class="callout warn"><div class="callout-title">Exam Trap</div>Singleton does NOT increase testability — it <strong>decreases</strong> it. Correct characteristics: A (one instance), C (global access), D (hidden dependencies). B is wrong.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">Why is the constructor <code>private</code>? What happens if it is <code>public</code>?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">If public, anyone can write <code>new BankConfig()</code> creating unlimited instances — destroying the guarantee. Private constructor makes direct instantiation impossible from outside, forcing everyone through <code>getInstance()</code>.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128081;</div><div class="hook-text"><strong>Memory Hook:</strong> One head of state per country. Private constructor = can't elect your own king. getInstance() = official succession.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('mvc')">&#8592; MVC</button><button class="btn primary" onclick="markDone('sing');show('adap')">Next: Adapter &#8594;</button></div>
+</div>
+
+<!-- ADAPTER -->
+<div class="topic-page" id="page-adap">
+<div class="topic-header"><div class="topic-badge">Topic 11 &middot; Design Patterns &middot; Structural</div><h1>Adapter Pattern</h1><p style="color:var(--muted)">Make incompatible interfaces work together without changing either.</p><div><span class="tag pattern">Structural</span><span class="tag concept">Wrapper</span></div></div>
+<h2>Structure</h2>
+<pre><code><span class="kw">public interface</span> <span class="tp">KYCVerifier</span> { <span class="kw">boolean</span> <span class="fn">verify</span>(<span class="tp">String</span> id); } <span class="cm">// new interface</span>
+<span class="kw">public class</span> <span class="tp">OldSystem</span> { <span class="kw">public boolean</span> <span class="fn">checkCustomer</span>(<span class="kw">int</span> id){<span class="kw">return true</span>;} } <span class="cm">// legacy</span>
+
+<span class="kw">public class</span> <span class="tp">VerificationAdapter</span> <span class="kw">implements</span> <span class="tp">KYCVerifier</span> {
+    <span class="kw">private</span> <span class="tp">OldSystem</span> legacy;
+    <span class="kw">public</span> <span class="fn">VerificationAdapter</span>(<span class="tp">OldSystem</span> l) { legacy = l; }
+
+    <span class="anno">@Override</span>
+    <span class="kw">public boolean</span> <span class="fn">verify</span>(<span class="tp">String</span> id) {
+        <span class="kw">return</span> legacy.<span class="fn">checkCustomer</span>(Integer.<span class="fn">parseInt</span>(id)); <span class="cm">// translate + delegate</span>
+    }
+}</code></pre>
+<table><tr><th>Question</th><th>Answer</th></tr>
+<tr><td>Does Adapter modify legacy code?</td><td>No — wraps it</td></tr>
+<tr><td>What does Adapter implement?</td><td>The NEW interface</td></tr>
+<tr><td>What does Adapter hold?</td><td>Reference to the OLD system</td></tr>
+<tr><td>Also known as</td><td>Wrapper pattern</td></tr></table>
+<div class="callout warn"><div class="callout-title">Exam Answer</div>Correct: A and C. The adapter allows incompatible interfaces to work together and implements the new interface while delegating to legacy code.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">What is the fundamental difference in purpose between Adapter and Strategy?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Adapter</strong> = compatibility. Solves a structural mismatch — translates between incompatible existing interfaces. <strong>Strategy</strong> = flexibility. Enables swapping between different algorithms at runtime. Adapter fixes an interface problem. Strategy enables behavioural variation.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128268;</div><div class="hook-text"><strong>Memory Hook:</strong> Travel plug adapter. Your laptop (new system) plugs into the adapter. Adapter plugs into foreign socket (legacy). Neither changes.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('sing')">&#8592; Singleton</button><button class="btn primary" onclick="markDone('adap');show('strat')">Next: Strategy &#8594;</button></div>
+</div>
+
+<!-- STRATEGY -->
+<div class="topic-page" id="page-strat">
+<div class="topic-header"><div class="topic-badge">Topic 12 &middot; Design Patterns &middot; Behavioral</div><h1>Strategy Pattern</h1><p style="color:var(--muted)">Swappable algorithms. No if-else chains. Change behaviour at runtime.</p><div><span class="tag pattern">Behavioral</span><span class="tag concept">Composition</span></div></div>
+<pre><code><span class="kw">public interface</span> <span class="tp">InterestCalculator</span> { <span class="kw">double</span> <span class="fn">calculate</span>(<span class="kw">double</span> balance); }
+
+<span class="kw">public class</span> <span class="tp">SavingsInterest</span> <span class="kw">implements</span> <span class="tp">InterestCalculator</span> {
+    <span class="anno">@Override</span> <span class="kw">public double</span> <span class="fn">calculate</span>(<span class="kw">double</span> b) { <span class="kw">return</span> b * <span class="nm">0.03</span>; }
+}
+<span class="kw">public class</span> <span class="tp">FixedInterest</span> <span class="kw">implements</span> <span class="tp">InterestCalculator</span> {
+    <span class="anno">@Override</span> <span class="kw">public double</span> <span class="fn">calculate</span>(<span class="kw">double</span> b) { <span class="kw">return</span> b * <span class="nm">0.06</span>; }
+}
+
+<span class="kw">public class</span> <span class="tp">BankAccount</span> {                  <span class="cm">// context — uses strategy</span>
+    <span class="kw">private double</span> balance;
+    <span class="kw">private</span> <span class="tp">InterestCalculator</span> calc;
+    <span class="kw">public</span> <span class="fn">BankAccount</span>(<span class="kw">double</span> bal, <span class="tp">InterestCalculator</span> c) { balance=bal; calc=c; }
+    <span class="kw">public double</span> <span class="fn">applyInterest</span>() { <span class="kw">return</span> calc.<span class="fn">calculate</span>(balance); }
+}
+
+<span class="cm">// Usage — swap strategy by injecting different implementation</span>
+<span class="tp">BankAccount</span> savings = <span class="kw">new</span> <span class="fn">BankAccount</span>(<span class="nm">1000</span>, <span class="kw">new</span> <span class="fn">SavingsInterest</span>()); <span class="cm">// 30.0</span>
+<span class="tp">BankAccount</span> fixed   = <span class="kw">new</span> <span class="fn">BankAccount</span>(<span class="nm">1000</span>, <span class="kw">new</span> <span class="fn">FixedInterest</span>());   <span class="cm">// 60.0</span></code></pre>
+<div class="callout tip"><div class="callout-title">Benefits</div>Add new strategies without changing existing code. No if-else chains. Change behaviour at runtime. Promotes composition over inheritance.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q"><code>SortingEngine</code> must sort differently for small vs large datasets. Name the pattern and describe the structure.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">Strategy. <code>SortingStrategy</code> interface with <code>sort()</code>. Concrete strategies: <code>SmallDataSort</code> and <code>LargeDataSort</code>. <code>SortingEngine</code> holds a <code>SortingStrategy</code> field, delegates to it. Inject whichever fits at runtime.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#9822;</div><div class="hook-text"><strong>Memory Hook:</strong> Strategy = interchangeable chess pieces. Player (context) picks which piece (strategy) to use. Swap without changing the player or board.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('adap')">&#8592; Adapter</button><button class="btn primary" onclick="markDone('strat');show('dec')">Next: Decorator &#8594;</button></div>
+</div>
+
+<!-- DECORATOR -->
+<div class="topic-page" id="page-dec">
+<div class="topic-header"><div class="topic-badge">Topic 13 &middot; Design Patterns &middot; Structural</div><h1>Decorator Pattern</h1><p style="color:var(--muted)">Add behaviour to individual objects. Stack wrappers freely at runtime.</p><div><span class="tag pattern">Structural</span><span class="tag concept">Wrapping</span><span class="tag concept">Dynamic</span></div></div>
+<h2>Big Picture</h2>
+<p>Book &#8364;20 + wrapping +&#8364;1 + card +&#8364;1 + VAT 21%. With inheritance you'd need one class per combination — it explodes. Decorator wraps objects inside other objects. Each wrapper adds one feature. Stack any combination at runtime.</p>
+<pre><code><span class="kw">public interface</span> <span class="tp">ProductPrice</span> { <span class="kw">double</span> <span class="fn">getPrice</span>(); }
+
+<span class="kw">public class</span> <span class="tp">Book</span> <span class="kw">implements</span> <span class="tp">ProductPrice</span> {
+    <span class="anno">@Override</span> <span class="kw">public double</span> <span class="fn">getPrice</span>() { <span class="kw">return</span> <span class="nm">20.0</span>; }
+}
+
+<span class="kw">public abstract class</span> <span class="tp">DecoratorPrice</span> <span class="kw">implements</span> <span class="tp">ProductPrice</span> {
+    <span class="kw">protected</span> <span class="tp">ProductPrice</span> wrapped;
+    <span class="kw">public</span> <span class="fn">DecoratorPrice</span>(<span class="tp">ProductPrice</span> w) { wrapped = w; }
+}
+
+<span class="kw">public class</span> <span class="tp">WrappingPrice</span> <span class="kw">extends</span> <span class="tp">DecoratorPrice</span> {
+    <span class="kw">public</span> <span class="fn">WrappingPrice</span>(<span class="tp">ProductPrice</span> w) { <span class="kw">super</span>(w); }
+    <span class="anno">@Override</span> <span class="kw">public double</span> <span class="fn">getPrice</span>() { <span class="kw">return</span> wrapped.<span class="fn">getPrice</span>() + <span class="nm">1.0</span>; }
+}
+<span class="kw">public class</span> <span class="tp">VATPrice</span> <span class="kw">extends</span> <span class="tp">DecoratorPrice</span> {
+    <span class="kw">public</span> <span class="fn">VATPrice</span>(<span class="tp">ProductPrice</span> w) { <span class="kw">super</span>(w); }
+    <span class="anno">@Override</span> <span class="kw">public double</span> <span class="fn">getPrice</span>() { <span class="kw">return</span> wrapped.<span class="fn">getPrice</span>() * <span class="nm">1.21</span>; }
+}
+
+<span class="cm">// Book + Wrapping + VAT = (20+1)*1.21 = 25.41</span>
+<span class="tp">ProductPrice</span> order = <span class="kw">new</span> <span class="fn">VATPrice</span>(<span class="kw">new</span> <span class="fn">WrappingPrice</span>(<span class="kw">new</span> <span class="fn">Book</span>()));
+System.out.println(order.<span class="fn">getPrice</span>());  <span class="cm">// 25.41</span></code></pre>
+<table><tr><th></th><th>Inheritance</th><th>Decorator</th></tr>
+<tr><td>Applies to</td><td>ALL instances</td><td>Individual objects</td></tr>
+<tr><td>Combinations</td><td>Explodes</td><td>Stack freely</td></tr>
+<tr><td>Decided at</td><td>Compile time</td><td>Runtime</td></tr></table>
+<div class="quiz-section"><div class="quiz-title">Predict the Output</div>
+<div class="quiz-q"><code>new VATPrice(new WrappingPrice(new Book())).getPrice()</code> — show working. Book=&#8364;20, Wrap=+&#8364;1, VAT=21%.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">Book=20.0 &#8594; WrappingPrice=20+1=21.0 &#8594; VATPrice=21&#215;1.21=<strong>25.41</strong></div></div>
+<div class="memory-hook"><div class="hook-icon">&#129345;</div><div class="hook-text"><strong>Memory Hook:</strong> Getting dressed. Base layer (real object) + jumper (decorator 1) + coat (decorator 2). Each wraps the previous. Remove layers without changing the person underneath.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('strat')">&#8592; Strategy</button><button class="btn primary" onclick="markDone('dec');show('obs')">Next: Observer &#8594;</button></div>
+</div>
+
+<!-- OBSERVER -->
+<div class="topic-page" id="page-obs">
+<div class="topic-header"><div class="topic-badge">Topic 14 &middot; Design Patterns &middot; Behavioral</div><h1>Observer Pattern</h1><p style="color:var(--muted)">One-to-many notification. Subscribe, unsubscribe, react automatically.</p><div><span class="tag pattern">Behavioral</span><span class="tag concept">Subject</span><span class="tag concept">Observer</span></div></div>
+<pre><code><span class="kw">public interface</span> <span class="tp">CartObserver</span> {
+    <span class="kw">void</span> <span class="fn">productAdded</span>(<span class="tp">String</span> p);
+    <span class="kw">void</span> <span class="fn">productRemoved</span>(<span class="tp">String</span> p);
+}
+
+<span class="kw">public class</span> <span class="tp">ShoppingCart</span> {             <span class="cm">// SUBJECT</span>
+    <span class="kw">private</span> List&lt;<span class="tp">CartObserver</span>&gt; observers = <span class="kw">new</span> ArrayList&lt;&gt;();
+    <span class="kw">public void</span> <span class="fn">addObserver</span>(<span class="tp">CartObserver</span> o) { observers.add(o); }
+    <span class="kw">public void</span> <span class="fn">removeObserver</span>(<span class="tp">CartObserver</span> o) { observers.remove(o); }
+    <span class="kw">public void</span> <span class="fn">addProduct</span>(<span class="tp">String</span> p) {
+        <span class="cm">// add to list...</span>
+        <span class="kw">for</span> (<span class="tp">CartObserver</span> o : observers) o.<span class="fn">productAdded</span>(p);
+    }
+}
+
+<span class="kw">public class</span> <span class="tp">EmailNotification</span> <span class="kw">implements</span> <span class="tp">CartObserver</span> {
+    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">productAdded</span>(<span class="tp">String</span> p) {
+        System.out.println(<span class="st">"Email: "</span> + p + <span class="st">" added."</span>);
+    }
+    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">productRemoved</span>(<span class="tp">String</span> p) {}
+}</code></pre>
+<div class="callout tip"><div class="callout-title">Why This Reduces Coupling</div>ShoppingCart knows nothing about EmailNotification. Adding new observer = write class + register. Zero changes to ShoppingCart.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">Decorator and Observer both use interfaces. What is the fundamental difference in purpose?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Decorator</strong> = add behaviour to an object by wrapping it. Augments method calls. Same interface as wrapped object. Example: adding VAT to price.<br><strong>Observer</strong> = notify dependents when state changes. Reacts to events. Separate Observer interface. Example: notify email when cart changes.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128240;</div><div class="hook-text"><strong>Memory Hook:</strong> Newspaper subscription. Paper (Subject) doesn't know readers personally. Just prints and delivers to all subscribers. Readers subscribe/unsubscribe freely.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('dec')">&#8592; Decorator</button><button class="btn primary" onclick="markDone('obs');show('cmd')">Next: Command &#8594;</button></div>
+</div>
+
+<!-- COMMAND -->
+<div class="topic-page" id="page-cmd">
+<div class="topic-header"><div class="topic-badge">Topic 15 &middot; Design Patterns &middot; Behavioral</div><h1>Command Pattern</h1><p style="color:var(--muted)">Encapsulate actions as objects. Replace switch with HashMap.</p><div><span class="tag pattern">Behavioral</span><span class="tag java">HashMap</span><span class="tag concept">Decoupling</span></div></div>
+<pre><code><span class="kw">public interface</span> <span class="tp">Command</span> { <span class="kw">void</span> <span class="fn">execute</span>(<span class="tp">Animal</span> animal); }
+
+<span class="kw">public class</span> <span class="tp">ReproduceCommand</span> <span class="kw">implements</span> <span class="tp">Command</span> {
+    <span class="anno">@Override</span>
+    <span class="kw">public void</span> <span class="fn">execute</span>(<span class="tp">Animal</span> a) { a.<span class="fn">reproduce</span>(); System.out.println(<span class="st">"Reproduced."</span>); }
+}
+
+<span class="kw">public class</span> <span class="tp">CommandHandler</span> {
+    <span class="kw">private</span> Map&lt;<span class="tp">Integer</span>,<span class="tp">Command</span>&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();
+
+    <span class="kw">public</span> <span class="fn">CommandHandler</span>() {
+        map.put(<span class="nm">1</span>, <span class="kw">new</span> <span class="fn">AgeCommand</span>());
+        map.put(<span class="nm">2</span>, <span class="kw">new</span> <span class="fn">RenameCommand</span>());
+        map.put(<span class="nm">3</span>, <span class="kw">new</span> <span class="fn">ReproduceCommand</span>());
+    }
+
+    <span class="kw">public void</span> <span class="fn">execute</span>(<span class="kw">int</span> input, <span class="tp">Animal</span> a) {
+        <span class="tp">Command</span> cmd = map.<span class="fn">get</span>(input);
+        <span class="kw">if</span> (cmd == <span class="kw">null</span>) cmd = <span class="kw">new</span> <span class="fn">IdleCommand</span>(); <span class="cm">// always null-check!</span>
+        cmd.<span class="fn">execute</span>(a);
+    }
+}</code></pre>
+<div class="callout tip"><div class="callout-title">HashMap vs Switch</div>O(1) lookup regardless of command count. Adding a command = one <code>put()</code>. No modification to execute() logic ever needed.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">What does "decoupling sender from receiver" mean in Command? Give a concrete example.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">The sender (CommandHandler) only calls <code>execute()</code> — it has no idea what that does. The receiver (Animal) doesn't know who triggered the action. Example: <code>execute(3, lion)</code> — the handler doesn't know it calls <code>lion.reproduce()</code>. That knowledge lives inside <code>ReproduceCommand</code> only.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128203;</div><div class="hook-text"><strong>Memory Hook:</strong> Restaurant order slip. You (sender) write what you want. Waiter carries it. Chef (receiver) reads and acts. Nobody needs to know each other.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('obs')">&#8592; Observer</button><button class="btn primary" onclick="markDone('cmd');show('exc')">Next: Exceptions &#8594;</button></div>
+</div>
+
+<!-- EXCEPTIONS -->
+<div class="topic-page" id="page-exc">
+<div class="topic-header"><div class="topic-badge">Topic 16 &middot; Java Mechanics</div><h1>Exceptions</h1><p style="color:var(--muted)">Handle runtime errors gracefully. Never crash silently.</p><div><span class="tag java">try-catch</span><span class="tag java">finally</span><span class="tag java">throws</span><span class="tag concept">Custom Exceptions</span></div></div>
+<h2>Big Picture</h2>
+<p>An exception is an object that represents a runtime error. Java has a structured system to catch, handle, or pass them up the call chain. Exceptions are always <strong>objects</strong> — instances of classes inheriting from <code>Exception</code>.</p>
+<div class="diagram">Throwable
+  +-- Error            (JVM problems — never catch these)
+  +-- Exception
+        +-- RuntimeException   (unchecked: NullPointer, ArrayIndexOutOfBounds...)
+        +-- Checked Exceptions (must catch or declare: IOException, FileNotFoundException...)</div>
+<h2>try-catch-finally</h2>
+<pre><code><span class="kw">try</span> {
+    <span class="kw">int</span>[] arr = <span class="kw">new int</span>[<span class="nm">2</span>];
+    System.out.println(arr[<span class="nm">5</span>]);       <span class="cm">// throws ArrayIndexOutOfBoundsException</span>
+    System.out.println(<span class="st">"after"</span>);      <span class="cm">// NEVER reached</span>
+} <span class="kw">catch</span> (<span class="tp">ArrayIndexOutOfBoundsException</span> e) {
+    System.out.println(<span class="st">"Caught: "</span> + e.<span class="fn">getMessage</span>());
+} <span class="kw">catch</span> (<span class="tp">NullPointerException</span> e) {     <span class="cm">// specific BEFORE general</span>
+    System.out.println(<span class="st">"Null!"</span>);
+} <span class="kw">finally</span> {
+    System.out.println(<span class="st">"Always runs"</span>); <span class="cm">// even if exception uncaught, even on return</span>
+}
+System.out.println(<span class="st">"Program continues"</span>);</code></pre>
+<h2>throws — Pass It Up</h2>
+<pre><code><span class="kw">public</span> <span class="fn">readFile</span>(<span class="tp">String</span> path) <span class="kw">throws</span> <span class="tp">FileNotFoundException</span> {
+    <span class="cm">// don't catch here — let the caller decide how to handle it</span>
+}</code></pre>
+<h2>Custom Exceptions</h2>
+<pre><code><span class="kw">public class</span> <span class="tp">InsufficientFundsException</span> <span class="kw">extends</span> <span class="tp">Exception</span> {
+    <span class="kw">public</span> <span class="fn">InsufficientFundsException</span>(<span class="tp">String</span> msg) { <span class="kw">super</span>(msg); }
+}
+
+<span class="kw">public void</span> <span class="fn">withdraw</span>(<span class="kw">double</span> amount) <span class="kw">throws</span> <span class="tp">InsufficientFundsException</span> {
+    <span class="kw">if</span> (amount &gt; balance)
+        <span class="kw">throw new</span> <span class="fn">InsufficientFundsException</span>(<span class="st">"Only "</span> + balance + <span class="st">" available"</span>);
+    balance -= amount;
+}</code></pre>
+<h2>try-with-resources</h2>
+<pre><code><span class="cm">// resource declared in try() — closed automatically when block ends</span>
+<span class="kw">try</span> (<span class="tp">Scanner</span> sc = <span class="kw">new</span> <span class="fn">Scanner</span>(<span class="kw">new</span> <span class="fn">File</span>(<span class="st">"data.txt"</span>))) {
+    System.out.println(sc.<span class="fn">nextLine</span>());
+} <span class="kw">catch</span> (<span class="tp">FileNotFoundException</span> e) {
+    System.out.println(<span class="st">"File not found!"</span>);
+} <span class="cm">// sc.close() called automatically</span></code></pre>
+<div class="callout danger"><div class="callout-title">Common Mistakes</div>
+1. Empty catch block — silently swallows errors. Never do this.<br>
+2. Catching <code>Exception</code> too broadly — lose information about what went wrong.<br>
+3. Wrong catch order — specific exceptions must come BEFORE general ones.<br>
+4. Catching where you can't handle it — use <code>throws</code> and let the right layer decide.</div>
+<div class="quiz-section"><div class="quiz-title">Predict the Output</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">try</span> {
+    System.out.println(<span class="st">"A"</span>);
+    <span class="kw">int</span> x = <span class="nm">10</span> / <span class="nm">0</span>;
+    System.out.println(<span class="st">"B"</span>);
+} <span class="kw">catch</span> (<span class="tp">ArithmeticException</span> e) {
+    System.out.println(<span class="st">"C"</span>);
+} <span class="kw">finally</span> {
+    System.out.println(<span class="st">"D"</span>);
+}
+System.out.println(<span class="st">"E"</span>);</code></pre></div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>A &rarr; C &rarr; D &rarr; E</strong><br><br>"A" prints. 10/0 throws ArithmeticException. "B" skipped. Catch prints "C". Finally always runs — prints "D". Program continues — prints "E".</div></div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q">When should you use <code>throws</code> on a method rather than catching the exception inside it?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">When the method doesn't have enough context to decide how to handle the error — the <em>caller</em> knows better. E.g. a file-reading utility doesn't know if a missing file should be ignored, retried, or shown as an error to the user. Declare <code>throws</code> and let the caller decide. Only catch where you can actually do something useful.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128737;</div><div class="hook-text"><strong>Memory Hook:</strong> try = risky action. catch = safety net for specific problems. finally = cleanup crew (always shows up). throws = passing the problem to whoever called you.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('cmd')">&#8592; Command</button><button class="btn primary" onclick="markDone('exc');show('ser')">Next: Serialization &#8594;</button></div>
+</div>
+
+<!-- SERIALIZATION -->
+<div class="topic-page" id="page-ser">
+<div class="topic-header"><div class="topic-badge">Topic 17 &middot; Java Mechanics</div><h1>Serialization</h1><p style="color:var(--muted)">Save objects to disk. Reconstruct them later. Persistent state across sessions.</p><div><span class="tag java">Serializable</span><span class="tag java">transient</span><span class="tag java">serialVersionUID</span></div></div>
+<h2>Big Picture</h2>
+<p>When your program ends, all objects in memory are gone. <strong>Serialization</strong> converts an object to bytes that can be saved to a file or sent over a network. <strong>Deserialization</strong> reconstructs the object from those bytes. The class must implement <code>Serializable</code> — a <em>marker interface</em> (no methods, just opt-in signal).</p>
+<pre><code><span class="kw">import</span> java.io.Serializable;
+
+<span class="kw">public class</span> <span class="tp">Vehicle</span> <span class="kw">implements</span> <span class="tp">Serializable</span> {
+    <span class="kw">private static final long</span> serialVersionUID = <span class="nm">1L</span>;  <span class="cm">// version identifier</span>
+    <span class="kw">private</span> <span class="tp">String</span> brand;
+    <span class="kw">private int</span> year;
+    <span class="kw">private transient</span> <span class="tp">String</span> sessionToken; <span class="cm">// NOT saved — excluded from stream</span>
+}</code></pre>
+<h2>Writing and Reading Objects</h2>
+<pre><code><span class="cm">// SAVE to file</span>
+<span class="kw">try</span> (<span class="tp">ObjectOutputStream</span> out = <span class="kw">new</span> <span class="fn">ObjectOutputStream</span>(
+        <span class="kw">new</span> <span class="fn">FileOutputStream</span>(<span class="st">"vehicle.ser"</span>))) {
+    out.<span class="fn">writeObject</span>(myCar);
+}
+
+<span class="cm">// LOAD from file</span>
+<span class="kw">try</span> (<span class="tp">ObjectInputStream</span> in = <span class="kw">new</span> <span class="fn">ObjectInputStream</span>(
+        <span class="kw">new</span> <span class="fn">FileInputStream</span>(<span class="st">"vehicle.ser"</span>))) {
+    <span class="tp">Vehicle</span> car = (<span class="tp">Vehicle</span>) in.<span class="fn">readObject</span>();
+}</code></pre>
+<h2>Key Concepts</h2>
+<table><tr><th>Concept</th><th>What it does</th></tr>
+<tr><td><code>Serializable</code></td><td>Marker interface — opts the class into serialization</td></tr>
+<tr><td><code>transient</code></td><td>Excludes a field — reset to default value on load</td></tr>
+<tr><td><code>serialVersionUID</code></td><td>Version ID — prevents incompatibility when class changes</td></tr>
+<tr><td>Deep serialization</td><td>All nested object fields must also implement Serializable</td></tr></table>
+<div class="callout warn"><div class="callout-title">When to use transient</div>
+Sensitive data (passwords, tokens), temporary/cached values that can be recalculated, fields whose type is not Serializable, UI state that should reset.</div>
+<div class="quiz-section"><div class="quiz-title">Active Recall</div>
+<div class="quiz-q"><code>BankAccount</code> has: <code>accountNumber</code> (String), <code>balance</code> (double), <code>pin</code> (String), <code>cachedInterest</code> (double, recalculated each session). Which fields should be <code>transient</code> and why?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><code>pin</code> &#8594; transient. Sensitive — never save passwords/PINs as plain bytes to disk.<br><code>cachedInterest</code> &#8594; transient. Derived/temporary — it is recalculated from balance when the object loads. No reason to persist it.</div></div>
+<div class="quiz-section"><div class="quiz-title">Concept Check</div>
+<div class="quiz-q">What is a marker interface? Why is <code>Serializable</code> a good example of one?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">A <strong>marker interface</strong> has no methods — it is purely an opt-in signal that tells the JVM (or framework) something about the class. <code>Serializable</code> has no methods. Implementing it simply marks the class as "safe to serialize." The JVM checks <code>instanceof Serializable</code> at runtime and throws <code>NotSerializableException</code> if the class hasn't opted in.</div></div>
+<div class="memory-hook"><div class="hook-icon">&#128190;</div><div class="hook-text"><strong>Memory Hook:</strong> Serialization = pressing Save on a video game. Your character's state is written to disk. Load it later — everything restored. Transient fields (like a temporary buff) reset to default.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('exc')">&#8592; Exceptions</button><button class="btn primary" onclick="markDone('ser');show('rev')">Next: Final Review &#8594;</button></div>
+</div>
+
+<!-- FINAL REVIEW -->
+<div class="topic-page" id="page-rev">
+<div class="topic-header"><div class="topic-badge">Topic 18 &middot; Mastery</div><h1>Final Review &amp; Exam Prep</h1><p style="color:var(--muted)">Complete cheat sheet. Decision frameworks. Exam-style questions.</p></div>
+
+<h2>Complete Course Map</h2>
+<div class="diagram">FOUNDATION
+  Objects &amp; Classes   state (fields) + behaviour (methods), this., new
+  Encapsulation        private fields, getters/setters, future-proof design
+
+HIERARCHY
+  Inheritance          extends, super(), is-a, DRY, @Override
+  Polymorphism         dynamic dispatch — runtime type wins
+  Constructor Chaining this(), super(), deepest runs first, parent always first
+
+ABSTRACTION
+  Abstract Classes     abstract keyword, cannot instantiate, enforced contracts
+  Interfaces           implements, is-capable-of, multiple allowed
+
+DESIGN QUALITY
+  Cohesion             High = one purpose = GOOD  (Single Responsibility)
+  Coupling             Low  = independent  = GOOD (communicate via interfaces)
+
+DESIGN PATTERNS
+  MVC        Model/View/Controller — separation of concerns
+  Singleton  private constructor + static instance + getInstance()
+  Adapter    implements new interface, wraps old system — also: Wrapper
+  Strategy   interface + concrete strategies injected into context
+  Decorator  same interface as wrapped object, stack at runtime
+  Observer   subject.addObserver(), notifyAll() on change
+  Command    Command interface + HashMap replaces switch
+
+JAVA MECHANICS
+  Exceptions     try-catch-finally, throws, custom extends Exception
+  Serialization  implements Serializable, transient, serialVersionUID</div>
+
+<h2>The Three Exam Questions to Ask</h2>
+<div class="callout"><div class="callout-title">Framework</div>
+<strong>1. What is the relationship?</strong><br>
+is-a &rarr; abstract class / extends &nbsp;&nbsp;|&nbsp;&nbsp; is-capable-of &rarr; interface &nbsp;&nbsp;|&nbsp;&nbsp; has-a &rarr; field (composition)<br><br>
+<strong>2. What is the problem?</strong><br>
+Too many responsibilities &rarr; cohesion &nbsp;&nbsp;|&nbsp;&nbsp; Too many dependencies &rarr; coupling<br>
+One instance needed &rarr; Singleton &nbsp;&nbsp;|&nbsp;&nbsp; Incompatible interfaces &rarr; Adapter<br>
+Swap algorithms &rarr; Strategy &nbsp;&nbsp;|&nbsp;&nbsp; Add behaviour dynamically &rarr; Decorator<br>
+Notify listeners &rarr; Observer &nbsp;&nbsp;|&nbsp;&nbsp; Encapsulate actions &rarr; Command<br>
+Separate data/display/input &rarr; MVC<br><br>
+<strong>3. What is the tradeoff?</strong><br>
+Every pattern adds classes. Always justify your choice.</div>
+
+<h2>Abstract Class vs Interface — Master Table</h2>
+<table><tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+<tr><td>Fields</td><td>&#10003; Yes</td><td>&#10007; No</td></tr>
+<tr><td>Constructors</td><td>&#10003; Yes (called via super())</td><td>&#10007; No</td></tr>
+<tr><td>Concrete methods</td><td>&#10003; Yes</td><td>&#10003; default only (Java 8+)</td></tr>
+<tr><td>A class can use</td><td>One only (extends)</td><td>Many (implements)</td></tr>
+<tr><td>Relationship</td><td>is-a</td><td>is-capable-of</td></tr></table>
+
+<h2>Pattern Quick Reference</h2>
+<table><tr><th>Pattern</th><th>Category</th><th>One-liner</th></tr>
+<tr><td>MVC</td><td>Architectural</td><td>Separate data / display / input</td></tr>
+<tr><td>Singleton</td><td>Creational</td><td>One instance, private constructor, static getInstance()</td></tr>
+<tr><td>Adapter</td><td>Structural</td><td>Implements new interface, holds &amp; delegates to old system</td></tr>
+<tr><td>Strategy</td><td>Behavioral</td><td>Swappable algorithm injected into context class</td></tr>
+<tr><td>Decorator</td><td>Structural</td><td>Wraps object in same interface, stack at runtime</td></tr>
+<tr><td>Observer</td><td>Behavioral</td><td>Subject notifies registered observer list on state change</td></tr>
+<tr><td>Command</td><td>Behavioral</td><td>Encapsulate action as object, HashMap lookup</td></tr></table>
+
+<h2>Exam-Style Questions</h2>
+<div class="quiz-section"><div class="quiz-title">Q1 — Design Scenario</div>
+<div class="quiz-q">When an order is placed, a warehouse is notified, a confirmation email is sent, and finance logs it. New notification types may be added. Which pattern? Name: Subject, Observer interface, 3 concrete observers. Why is this better than calling each service directly from <code>placeOrder()</code>?</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Observer pattern.</strong> Subject: <code>OrderSystem</code>. Observer interface: <code>OrderObserver</code> with <code>orderPlaced(Order o)</code>. Concrete observers: <code>WarehouseNotifier</code>, <code>EmailService</code>, <code>FinanceLogger</code>.<br><br>Better because: <code>OrderSystem</code> doesn't know about any specific service — low coupling. Adding a new notification = write new class + register. Zero changes to <code>OrderSystem</code>. Direct calls = high coupling, must modify <code>placeOrder()</code> every time a new service is added.</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Q2 — Predict Output</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">abstract class</span> <span class="tp">Vehicle</span> {
+    <span class="kw">protected</span> <span class="tp">String</span> brand;
+    <span class="kw">public</span> <span class="fn">Vehicle</span>(<span class="tp">String</span> b) { brand=b; System.out.println(<span class="st">"Vehicle: "</span>+b); }
+    <span class="kw">public abstract void</span> <span class="fn">move</span>();
+}
+<span class="kw">class</span> <span class="tp">Car</span> <span class="kw">extends</span> <span class="tp">Vehicle</span> {
+    <span class="kw">public</span> <span class="fn">Car</span>(<span class="tp">String</span> b) { <span class="kw">super</span>(b); System.out.println(<span class="st">"Car: "</span>+b); }
+    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">move</span>() { System.out.println(brand+<span class="st">" drives"</span>); }
+}
+<span class="kw">class</span> <span class="tp">Boat</span> <span class="kw">extends</span> <span class="tp">Vehicle</span> {
+    <span class="kw">public</span> <span class="fn">Boat</span>(<span class="tp">String</span> b) { <span class="kw">super</span>(b); System.out.println(<span class="st">"Boat: "</span>+b); }
+    <span class="anno">@Override</span> <span class="kw">public void</span> <span class="fn">move</span>() { System.out.println(brand+<span class="st">" sails"</span>); }
+    <span class="kw">public void</span> <span class="fn">dock</span>() { System.out.println(brand+<span class="st">" docking"</span>); }
+}
+<span class="tp">Vehicle</span> v1 = <span class="kw">new</span> <span class="fn">Car</span>(<span class="st">"Toyota"</span>);
+<span class="tp">Vehicle</span> v2 = <span class="kw">new</span> <span class="fn">Boat</span>(<span class="st">"Yamaha"</span>);
+v1.<span class="fn">move</span>(); v2.<span class="fn">move</span>(); v2.<span class="fn">dock</span>();</code></pre></div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">Vehicle: Toyota &rarr; Car: Toyota &rarr; Vehicle: Yamaha &rarr; Boat: Yamaha &rarr; Toyota drives &rarr; Yamaha sails &rarr; <strong>COMPILE ERROR on v2.dock()</strong><br><br><code>v2</code> is declared as type <code>Vehicle</code>. <code>Vehicle</code> has no <code>dock()</code> method. Declared type controls what methods you can call at compile time.</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Q3 — Spot All Design Problems</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">public class</span> <span class="tp">OrderSystem</span> {
+    <span class="kw">public static</span> <span class="tp">OrderSystem</span> instance;   <span class="cm">// Singleton attempt</span>
+    <span class="kw">public void</span> <span class="fn">placeOrder</span>(<span class="tp">String</span> item) {
+        System.out.println(<span class="st">"Order: "</span>+item);
+        <span class="fn">sendEmail</span>(item); <span class="fn">updateInventory</span>(item); <span class="fn">logTransaction</span>(item);
+    }
+    <span class="kw">private void</span> <span class="fn">sendEmail</span>(<span class="tp">String</span> i) { }
+    <span class="kw">private void</span> <span class="fn">updateInventory</span>(<span class="tp">String</span> i) { }
+    <span class="kw">private void</span> <span class="fn">logTransaction</span>(<span class="tp">String</span> i) { }
+}</code></pre>Find every problem. Name the fix for each.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">
+<strong>1. Singleton broken</strong> — <code>instance</code> is <code>public</code>. Anyone can do <code>OrderSystem.instance = null</code>. Fix: make it <code>private</code>, add private constructor + <code>getInstance()</code>.<br><br>
+<strong>2. Low cohesion</strong> — OrderSystem handles ordering, email, inventory, and logging. 4 responsibilities. Fix: extract into <code>EmailService</code>, <code>InventoryService</code>, <code>TransactionLogger</code>.<br><br>
+<strong>3. High coupling</strong> — <code>placeOrder()</code> directly calls each service. Adding a new notification requires modifying this class. Fix: use Observer — register services as observers, notify them on order.
+</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Q4 — Pattern Identification</div>
+<div class="quiz-q">(a) Logging system — exactly one global instance. (b) Music player switching shuffle/repeat/sequential. (c) GUI app separating data, display, input. (d) Multiple services react when order placed. (e) Coffee: add milk, sugar, syrup individually to any drink.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">(a) <strong>Singleton</strong> — one instance globally.<br>(b) <strong>Strategy</strong> — swappable algorithm.<br>(c) <strong>MVC</strong> — separation of concerns.<br>(d) <strong>Observer</strong> — one-to-many notification.<br>(e) <strong>Decorator</strong> — add behaviour to individual objects dynamically.</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Q5 — Constructor Chaining Output</div>
+<div class="quiz-q"><pre style="margin:.5rem 0"><code><span class="kw">class</span> <span class="tp">A</span> {
+    <span class="kw">public</span> <span class="fn">A</span>() { <span class="kw">this</span>(<span class="nm">1</span>); System.out.println(<span class="st">"A()"</span>); }
+    <span class="kw">public</span> <span class="fn">A</span>(<span class="kw">int</span> x) { System.out.println(<span class="st">"A("</span>+x+<span class="st">")"</span>); }
+}
+<span class="kw">class</span> <span class="tp">B</span> <span class="kw">extends</span> <span class="tp">A</span> {
+    <span class="kw">public</span> <span class="fn">B</span>() { System.out.println(<span class="st">"B()"</span>); }
+}
+<span class="kw">new</span> <span class="fn">B</span>();</code></pre></div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box">A(1) &rarr; A() &rarr; B()<br><br>B() has no explicit super() so Java inserts <code>super()</code> automatically &rarr; A() starts &rarr; A() calls this(1) &rarr; A(1) runs, prints "A(1)" &rarr; A() continues, prints "A()" &rarr; B() continues, prints "B()".</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Q6 — Exceptions</div>
+<div class="quiz-q">You call a method that can throw <code>InsufficientFundsException</code>. You want to always log the attempt regardless of outcome, and only show an error message if it fails. Write the try-catch-finally skeleton.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><pre style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:.8rem;font-family:var(--mono);font-size:12px">try {
+    account.withdraw(500);
+} catch (InsufficientFundsException e) {
+    System.out.println("Error: " + e.getMessage());
+} finally {
+    System.out.println("Attempt logged."); // always runs
+}</pre></div></div>
+
+<div class="memory-hook"><div class="hook-icon">&#127942;</div><div class="hook-text"><strong>Final Memory Hook:</strong> OOP = managing complexity. Class=blueprint. Object=instance. Encapsulation=lockbox. Inheritance=family tree. Polymorphism=actor in roles. Abstract=unfinished blueprint. Interface=skill badge. High cohesion=focused. Low coupling=independent. Patterns=proven recipes.</div></div>
+<div class="nav-btns"><button class="btn" onclick="show('ser')">&#8592; Serialization</button><button class="btn primary" onclick="markDone('rev');show('roadmap')">&#8592; Back to Roadmap</button></div>
+</div>
+
+</div></main></div>
+
+<script>
+const topics=['oc','enc','inh','poly','cc','abs','iface','cohcoup','mvc','sing','adap','strat','dec','obs','cmd','exc','ser','rev'];
+const done=new Set();
+const checklistItems=[
+  'Explain class vs object — state and behaviour',
+  'Write a class with private fields, constructor, and methods',
+  'Use this. correctly to avoid shadowing',
+  'Explain all four access modifiers with examples',
+  'Write getters/setters and explain why trivial ones still matter',
+  'Create a subclass with extends and call super()',
+  'Override a method correctly with @Override',
+  'Apply the is-a vs has-a test to decide between inheritance and composition',
+  'Explain dynamic dispatch — predict output with declared vs runtime type',
+  'Predict constructor chaining output across 2+ levels',
+  'Write an abstract class with abstract and concrete methods',
+  'Write an interface and implement it in two unrelated classes',
+  'Decide abstract class vs interface from a scenario',
+  'Define high cohesion and low coupling, give a bad and good example each',
+  'Identify cohesion and coupling problems in given code and fix them',
+  'Explain the three MVC components and trace user input through the flow',
+  'Implement Singleton: private constructor + static instance + getInstance()',
+  'Write an Adapter wrapping a legacy system',
+  'Implement Strategy with two concrete strategies injected into a context class',
+  'Explain how Decorator differs from inheritance — what problem it solves',
+  'Design an Observer system: subject, interface, 2 concrete observers',
+  'Replace a switch-statement with Command pattern + HashMap',
+  'Write try-catch with multiple catch blocks in correct order',
+  'Use throws and create a custom checked exception',
+  'Identify which fields should be transient and why',
+  'Identify the correct pattern from a scenario description (all 7 patterns)'
+];
+function buildChecklist(){
+  const el=document.getElementById('checklist');
+  el.innerHTML=checklistItems.map((item,i)=>`
+    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12.5px;padding:3px 0;color:var(--muted)">
+      <input type="checkbox" id="chk${i}" style="accent-color:var(--accent2);width:13px;height:13px">
       ${item}
     </label>`).join('');
 }
-
-function show(id) {
-  document.querySelectorAll('.topic-page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const page = document.getElementById('page-'+id);
-  const nav  = document.getElementById('nav-'+id);
-  if (page) page.classList.add('active');
-  if (nav)  nav.classList.add('active');
+function show(id){
+  document.querySelectorAll('.topic-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  const nav=document.getElementById('nav-'+id);
+  if(page)page.classList.add('active');
+  if(nav)nav.classList.add('active');
   document.querySelector('.main').scrollTo(0,0);
 }
-
-function markDone(id) {
+function markDone(id){
   done.add(id);
-  const nav = document.getElementById('nav-'+id);
-  if (nav) nav.classList.add('done');
-  const fill = Math.round((done.size / topics.length) * 100);
-  document.getElementById('progress-fill').style.width = fill + '%';
-  document.getElementById('progress-label').textContent = done.size + ' / ' + topics.length;
+  const nav=document.getElementById('nav-'+id);
+  if(nav)nav.classList.add('done');
+  const fill=Math.round((done.size/topics.length)*100);
+  document.getElementById('progress-fill').style.width=fill+'%';
+  document.getElementById('progress-label').textContent=done.size+' / '+topics.length;
 }
-
-function switchTab(el, group, tab) {
-  el.closest('.section-tabs').querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('[id^="'+group+'-"]').forEach(c => c.classList.remove('active'));
-  const target = document.getElementById(group+'-'+tab);
-  if (target) target.classList.add('active');
+function toggleAnswer(btn){
+  const box=btn.nextElementSibling;
+  const vis=box.classList.toggle('visible');
+  btn.textContent=vis?'\u25be hide answer':'\u25b8 reveal answer';
 }
-
-function toggleAnswer(btn) {
-  const box = btn.nextElementSibling;
-  const vis = box.classList.toggle('visible');
-  btn.textContent = vis ? '▾ hide answer' : '▸ reveal answer';
-}
-
 buildChecklist();
 show('roadmap');
 document.getElementById('nav-roadmap').classList.add('active');
 </script>
-</body>
-</html>
+</body></html>
