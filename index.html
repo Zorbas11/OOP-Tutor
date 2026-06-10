@@ -426,29 +426,67 @@ List&lt;<span class="tp">NoiseMaker</span>&gt; list = ...; <span class="cm">// D
 <!-- COHESION & COUPLING -->
 <div class="topic-page" id="page-cohcoup">
 <div class="topic-header"><div class="topic-badge">Topic 08 &middot; Design Quality</div><h1>Cohesion &amp; Coupling</h1><p style="color:var(--muted)">The two measuring sticks of good software design.</p><div><span class="tag concept">High Cohesion</span><span class="tag concept">Low Coupling</span><span class="tag concept">SRP</span></div></div>
+
 <h2>Cohesion — Inside a Class</h2>
-<p>Measures how closely related everything inside a single class is.</p>
-<div class="callout danger"><div class="callout-title">Low Cohesion — BAD</div><code>BankOperations</code> creates accounts, sends emails, calculates loans, prints receipts. Four unrelated responsibilities. Any change in any system forces edits here.</div>
-<div class="callout tip"><div class="callout-title">High Cohesion — GOOD</div><code>AccountService</code> only manages accounts. <code>EmailService</code> only handles email. Each class has one reason to change — the Single Responsibility Principle.</div>
+<p>Measures how closely related everything inside a single class is. High cohesion = one class, one clear purpose. Low cohesion = a class doing many unrelated things.</p>
+<div class="callout danger"><div class="callout-title">Low Cohesion — BAD</div><code>BankOperations</code> creates accounts, sends emails, calculates loans, prints receipts. Four unrelated responsibilities in one class. Any change forces edits here regardless of which system changed.</div>
+<div class="callout tip"><div class="callout-title">High Cohesion — GOOD</div><code>AccountService</code> only manages accounts. <code>EmailService</code> only handles email. Each class has exactly one reason to change — this is the Single Responsibility Principle (SRP).</div>
+
+<h2>Types of Cohesion — Worst to Best</h2>
+<table>
+<tr><th>#</th><th>Type</th><th>Description</th><th>Example</th><th>Rating</th></tr>
+<tr><td>1</td><td><strong>Coincidental</strong></td><td>Parts grouped randomly or arbitrarily — no logical connection</td><td>Random utility dump class</td><td style="color:#e24b4a">Worst</td></tr>
+<tr><td>2</td><td><strong>Logical</strong></td><td>Similar activities grouped together but selected by a control flag or logic parameter</td><td>One method handles logging, printing, and file I/O based on a <code>mode</code> flag</td><td style="color:#e24b4a">Bad</td></tr>
+<tr><td>3</td><td><strong>Temporal</strong></td><td>Unrelated elements grouped only because they execute at the same time</td><td>An <code>init()</code> that connects DB, starts timer, and loads config — order doesn't matter</td><td style="color:var(--accent3)">Poor</td></tr>
+<tr><td>4</td><td><strong>Procedural</strong></td><td>Elements follow a specific control sequence — order matters</td><td>ATM: validate PIN → check balance → dispense cash → print receipt</td><td style="color:var(--accent3)">Moderate</td></tr>
+<tr><td>5</td><td><strong>Communicational</strong></td><td>Elements operate on the same data or contribute to the same output</td><td>Methods that all use the same <code>account</code> object to perform different tasks on it</td><td style="color:var(--accent4)">OK</td></tr>
+<tr><td>6</td><td><strong>Sequential</strong></td><td>Output of one element is the input to the next — pipeline</td><td>Calculate interest from account → feed result directly to <code>applyInterest()</code></td><td style="color:var(--accent2)">Good</td></tr>
+<tr><td>7</td><td><strong>Functional</strong></td><td>All elements contribute to a single, well-defined task</td><td>A method that only handles deposit logic — nothing else</td><td style="color:var(--accent2)">Best</td></tr>
+</table>
+<div class="callout tip"><div class="callout-title">Exam Tip</div>You need to recognise all 7 types by name and description. The key question: "Is there a single unifying reason all the elements belong together?" If yes → lean toward Functional. If it's just timing or a flag → Temporal or Logical.</div>
+
 <h2>Coupling — Between Classes</h2>
-<p>Measures how much one class depends on or knows about another class's internals.</p>
-<table><tr><th>Type</th><th>Description</th><th>Rating</th></tr>
-<tr><td>Content</td><td>Directly accesses another class's private fields</td><td style="color:#e24b4a">Worst</td></tr>
-<tr><td>Common</td><td>Multiple classes share the same global data</td><td style="color:var(--accent3)">Bad</td></tr>
-<tr><td>Control</td><td>Passes flags to control another class's logic</td><td style="color:var(--accent3)">Bad</td></tr>
-<tr><td>External</td><td>Depends directly on external APIs/tools</td><td style="color:var(--accent4)">Moderate</td></tr>
-<tr><td>Data</td><td>Only shares data through method parameters</td><td style="color:var(--accent2)">Best</td></tr></table>
+<p>Measures how much one class depends on or knows about another class's internals. The higher the coupling, the harder it is to change one class without breaking another.</p>
+<div class="callout danger"><div class="callout-title">High Coupling — BAD</div><code>BankManager</code> reaches directly into <code>Bank</code>'s private fields. If Bank renames anything, BankManager breaks. Hard to test without a real Bank instance.</div>
+<div class="callout tip"><div class="callout-title">Low Coupling — GOOD</div><code>BankManager</code> depends only on the <code>BankOperations</code> interface. Swap the real implementation for a mock in tests. Change internals of <code>BankService</code> without touching <code>BankManager</code>.</div>
+
+<h2>Types of Coupling — Worst to Best</h2>
+<table>
+<tr><th>#</th><th>Type</th><th>Description</th><th>Problem</th><th>Rating</th></tr>
+<tr><td>1</td><td><strong>Content</strong></td><td>One class directly accesses or modifies private fields/methods of another</td><td><code>AdminPanel</code> reads <code>BankDB</code>'s private fields — any internal rename breaks <code>AdminPanel</code></td><td style="color:#e24b4a">Worst</td></tr>
+<tr><td>2</td><td><strong>Common</strong></td><td>Multiple classes share the same global data/state</td><td><code>LoanService</code> and <code>TransactionService</code> both read/write <code>GlobalSettings</code> — one silently affects the other</td><td style="color:#e24b4a">Bad</td></tr>
+<tr><td>3</td><td><strong>External</strong></td><td>Classes depend directly on external tools, APIs, or file formats</td><td><code>BankAlerts</code> hardcodes a specific third-party API — if that API changes, the class breaks</td><td style="color:var(--accent3)">Moderate</td></tr>
+<tr><td>4</td><td><strong>Control</strong></td><td>One class passes a flag to control another class's internal logic</td><td><code>MainBank</code> passes <code>boolean isPDF</code> to <code>ReportService</code> — ties their logic together via flags</td><td style="color:var(--accent3)">Moderate</td></tr>
+<tr><td>5</td><td><strong>Data</strong></td><td>Modules communicate only through required method parameters — no hidden dependencies</td><td>None — <code>AccountService.deposit(amount)</code> receives only what it needs. Clean and independent.</td><td style="color:var(--accent2)">Best</td></tr>
+</table>
+<div class="callout warn"><div class="callout-title">&#9888; Common Exam Mistake — Coupling Order</div>External (3) comes <strong>before</strong> Control (4) in worst→best order. Students often swap these. Remember: External depends on outside forces you can't control — that's worse than a flag between two classes you own.</div>
+
 <h2>The Master Rule</h2>
 <table><tr><th>Aspect</th><th>Cohesion</th><th>Coupling</th></tr>
 <tr><td>High is</td><td style="color:var(--accent2)">&#10003; GOOD</td><td style="color:#e24b4a">&#10007; BAD</td></tr>
 <tr><td>Low is</td><td style="color:#e24b4a">&#10007; BAD</td><td style="color:var(--accent2)">&#10003; GOOD</td></tr>
 <tr><td>Goal</td><td>One class, one purpose</td><td>Independent modules</td></tr>
-<tr><td>Design hint</td><td>Single Responsibility Principle</td><td>Communicate through interfaces</td></tr></table>
-<div class="quiz-section"><div class="quiz-title">Active Recall</div>
-<div class="quiz-q"><code>StudentManager</code> handles login, sends emails, writes to database, calculates grades. What is wrong and how do you fix it?</div>
+<tr><td>Design hint</td><td>Single Responsibility Principle</td><td>Depend on interfaces, not implementations</td></tr></table>
+
+<div class="quiz-section"><div class="quiz-title">Active Recall — Cohesion Types</div>
+<div class="quiz-q">Name all 7 cohesion types in order from worst to best. For each one give a one-sentence description.</div>
 <button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
-<div class="answer-box"><strong>Low cohesion</strong> — 4 unrelated responsibilities, violates Single Responsibility Principle. Fix: split into <code>AuthService</code> (login), <code>EmailService</code> (email), <code>DatabaseService</code> (persistence), <code>GradeCalculator</code> (grades). Each now has one reason to change. This also improves coupling — each class is independent.</div></div>
-<div class="memory-hook"><div class="hook-icon">&#9878;</div><div class="hook-text"><strong>Memory Hook:</strong> "Cohesion HIGH is great. Coupling LOW is great." Inside: tight and focused. Between: loose and independent.</div></div>
+<div class="answer-box">
+1. <strong>Coincidental</strong> — randomly grouped, no relationship.<br>
+2. <strong>Logical</strong> — similar activities selected by a control flag.<br>
+3. <strong>Temporal</strong> — unrelated things grouped only because they run at the same time.<br>
+4. <strong>Procedural</strong> — elements follow a fixed sequence/order.<br>
+5. <strong>Communicational</strong> — elements operate on the same data or produce the same output.<br>
+6. <strong>Sequential</strong> — output of one step feeds directly into the next.<br>
+7. <strong>Functional</strong> — all elements contribute to exactly one well-defined task. ✅
+</div></div>
+
+<div class="quiz-section"><div class="quiz-title">Active Recall — Coupling Order</div>
+<div class="quiz-q"><code>StudentManager</code> handles login, emails, database writes, and grade calculation. What is the cohesion problem and how do you fix it? Also: put the 5 coupling types in order from worst to best.</div>
+<button class="answer-toggle" onclick="toggleAnswer(this)">&#9658; reveal answer</button>
+<div class="answer-box"><strong>Cohesion:</strong> Low cohesion — 4 unrelated responsibilities, violates SRP. Fix: split into <code>AuthService</code>, <code>EmailService</code>, <code>DatabaseService</code>, <code>GradeCalculator</code>.<br><br><strong>Coupling worst→best:</strong> Content → Common → External → Control → Data.</div></div>
+
+<div class="memory-hook"><div class="hook-icon">&#9878;</div><div class="hook-text"><strong>Memory Hook:</strong> Cohesion: "How focused is this class?" Functional = laser-focused = best. Coincidental = random junk drawer = worst.<br>Coupling: "How tangled are these classes?" Data coupling = pass only what's needed = clean handshake = best. Content = reach into someone else's pockets = worst.</div></div>
 <div class="nav-btns"><button class="btn" onclick="show('iface')">&#8592; Interfaces</button><button class="btn primary" onclick="markDone('cohcoup');show('mvc')">Next: MVC &#8594;</button></div>
 </div>
 
